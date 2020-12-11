@@ -1,0 +1,100 @@
+﻿@page "/user/userlist"
+@using Client.ViewModel
+@using WebPWA.Shared;
+@inject UserViewModel _userViewModel
+
+<h3>UserList</h3>
+
+@if (lstUser != null && lstUser.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Full Name</th>
+                <th scope="col">Add Dress</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
+                <th scope="col"></th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in lstUser)
+            {
+                i++;
+                <tr>
+                    <th scope="row">@i</th>
+                    <td>@item.FullName</td>
+                    <td>@item.Address</td>
+                    <td>@item.LoginName</td>
+                    <td>@item.Phone</td>
+                    <td><a href="/userdetail/@item.ID">Edit</a></td>
+                    <td><button class="btn btn-danger" @onclick="(() => HandleDeleteClick(item.ID))">Delete</button></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <h3>Không tồn tại người dùng trong hệ thống</h3>
+}
+
+
+@if (ShowConfirmation)
+{
+    <div class="modal show d-block" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm Delete</h5>
+                    <button type="button" @onclick="HandleClose" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Are you sure you want to delete?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" @onclick="HandleDelete">Delete</button>
+                    <button type="button" @onclick="HandleClose" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private List<User> lstUser = new List<User>();
+
+    int i = 0;
+    Guid id;
+    bool ShowConfirmation = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        lstUser = await _userViewModel.GetAllUser();
+    }
+
+    protected void HandleDeleteClick(Guid _id)
+    {
+        ShowConfirmation = true;
+        id = _id;
+        i = 0;
+    }
+
+    protected async Task HandleDelete()
+    {
+        await _userViewModel.DeleteUser(id);
+        ShowConfirmation = false;
+        i = 0;
+        lstUser = await _userViewModel.GetAllUser();
+    }
+
+    protected void HandleClose()
+    {
+        ShowConfirmation = false;
+        i = 0;
+    }
+}

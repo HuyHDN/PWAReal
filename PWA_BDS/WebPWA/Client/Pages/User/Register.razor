@@ -1,0 +1,49 @@
+﻿@page "/register"
+@using Client.ViewModel
+@using WebPWA.Shared
+@inject NavigationManager NavigationManager
+@inject UserViewModel _userViewModel
+
+<h3>Đăng kí</h3>
+
+<EditForm Model="@_userViewModel" OnValidSubmit="HandleRegister">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="email">Email</label>
+        <InputText id="email" @bind-Value="_userViewModel.LoginName" class="form-control" />
+        <ValidationMessage For="@(() => _userViewModel.LoginName)" />
+    </div>
+    <div class="form-group">
+        <label for="fullname">Họ tên</label>
+        <InputText id="fullname" @bind-Value="_userViewModel.FullName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="address">Địa chỉ</label>
+        <InputText id="address" @bind-Value="_userViewModel.Address" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="phone">Điện thoại</label>
+        <InputText id="phone" @bind-Value="_userViewModel.Phone" maxlength="12" class="form-control" />
+        <ValidationMessage For="@(() => _userViewModel.Phone)" />
+    </div>
+    <div class="form-group">
+        <label for="password">Mật khẩu</label>
+        <InputText id="password" @bind-Value="_userViewModel.LoginPassword" type="password" class="form-control" />
+        <ValidationMessage For="@(() => _userViewModel.LoginPassword)" />
+    </div>
+    <div class="form-group">
+        <label for="confirmpassword">Nhập lại mật khẩu</label>
+        <InputText id="confirmpassword" @bind-Value="_userViewModel.ConfirmPassword" type="password" class="form-control" />
+        <ValidationMessage For="@(() => _userViewModel.ConfirmPassword)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Đăng kí</button>
+</EditForm>
+
+@code {
+    
+    private async Task HandleRegister()
+    {
+        await _userViewModel.CreateUser();
+        NavigationManager.NavigateTo("login");
+    }
+}

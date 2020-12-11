@@ -1,0 +1,54 @@
+﻿@page "/userdetail/{id}"
+@using WebPWA.Shared
+@using Client.ViewModel
+@inject NavigationManager NavigationManager
+@inject UserViewModel _userViewModel
+
+<h3>Register</h3>
+
+<EditForm Model="@userDetail" OnValidSubmit="HandleUpdateUser">
+    <DataAnnotationsValidator />
+    <div class="form-group">
+        <label for="fullname">Họ tên</label>
+        <InputText id="fullname" @bind-Value="userDetail.FullName" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="address">Địa chỉ</label>
+        <InputText id="address" @bind-Value="userDetail.Address" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="phone">Điện thoại</label>
+        <InputText id="phone" @bind-Value="userDetail.Phone" maxlength="12" class="form-control" />
+        <ValidationMessage For="@(() => userDetail.Phone)" />
+    </div>
+    <button type="submit" class="btn btn-primary">Cập nhật</button>
+    @if (success)
+    {
+        <br/><label>Cập nhật thành công</label>
+    }
+</EditForm>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+
+    bool success = false;
+    Guid guidID;
+    UserDetailInfo userDetail = new UserDetailInfo();
+
+    protected override async Task OnInitializedAsync()
+    {
+        guidID = Guid.Parse(Id);
+        await _userViewModel.GetUserByID(guidID);
+    }
+
+    private async Task HandleUpdateUser()
+    {
+        _userViewModel.FullName = userDetail.FullName;
+        _userViewModel.Phone = userDetail.Phone;
+        _userViewModel.Address = userDetail.Address;
+        guidID = Guid.Parse(Id);
+        await _userViewModel.UpdateUser(guidID);
+        success = true;
+    }
+}
