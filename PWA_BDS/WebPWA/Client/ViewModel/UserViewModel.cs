@@ -71,20 +71,22 @@ namespace WebPWA.Client.ViewModel
             await httpClient.PostAsJsonAsync("http://localhost:70/WebAPI/User/CreateUser/", user);
         }
 
-        public async Task LoginUser()
+        public async Task<User> LoginUser()
         {
             User user = this;
             HttpResponseMessage response = await httpClient.PostAsJsonAsync("http://localhost:70/WebAPI/User/LoginUser/", user);
             if (response.IsSuccessStatusCode)
             {
-                int a = 1;
-                UserSession userSession = new UserSession();
-                userSession.CurrentUser = user;
+                ServiceResponse<User> userResponse = new ServiceResponse<User>();
+                User u = new User();
+                userResponse = await httpClient.GetFromJsonAsync<ServiceResponse<User>>("http://localhost:70/WebAPI/User/GetUserByLoginName/" + user.LoginName);
+                if (userResponse != null)
+                {
+                    u = userResponse.Data;
+                    return u;
+                }
             }
-            else
-            {
-                int b = 2;
-            }
+            return null;
         }
 
         private void LoadCurrentObject(UserViewModel userViewModel)

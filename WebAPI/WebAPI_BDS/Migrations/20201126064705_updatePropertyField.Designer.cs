@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAPI_BDS.Model;
 
 namespace WebAPI_BDS.Migrations
 {
     [DbContext(typeof(BdsDbContext))]
-    partial class BdsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201126064705_updatePropertyField")]
+    partial class updatePropertyField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -34,7 +36,7 @@ namespace WebAPI_BDS.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ParentID")
+                    b.Property<Guid>("ParentID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
@@ -53,7 +55,7 @@ namespace WebAPI_BDS.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ParentID")
+                    b.Property<Guid>("ParentID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
@@ -76,17 +78,10 @@ namespace WebAPI_BDS.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ParentID")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ParentLocationID")
+                    b.Property<Guid>("ParentID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
-
-                    b.HasIndex("LocationTypeID");
-
-                    b.HasIndex("ParentLocationID");
 
                     b.ToTable("Location");
                 });
@@ -100,7 +95,7 @@ namespace WebAPI_BDS.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("ParentID")
+                    b.Property<Guid>("ParentID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
@@ -312,23 +307,6 @@ namespace WebAPI_BDS.Migrations
                         .IsRequired();
 
                     b.Navigation("CodeType");
-                });
-
-            modelBuilder.Entity("WebAPI_BDS.Model.Location", b =>
-                {
-                    b.HasOne("WebAPI_BDS.Model.LocationType", "LocationType")
-                        .WithMany()
-                        .HasForeignKey("LocationTypeID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WebAPI_BDS.Model.Location", "ParentLocation")
-                        .WithMany()
-                        .HasForeignKey("ParentLocationID");
-
-                    b.Navigation("LocationType");
-
-                    b.Navigation("ParentLocation");
                 });
 
             modelBuilder.Entity("WebAPI_BDS.Model.News", b =>

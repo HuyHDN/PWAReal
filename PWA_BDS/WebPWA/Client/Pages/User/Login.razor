@@ -1,9 +1,9 @@
-﻿@page "/login"
+﻿@page "/user/login"
 @using WebPWA.Shared
 @using Client.ViewModel
 @inject UserViewModel _userViewModel
 @inject NavigationManager NavigationManager
-@inject UserSession _userSession
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
 <h3>Login</h3>
 
@@ -18,15 +18,37 @@
         <InputText id="password" @bind-Value="user.Password" type="password" class="form-control" />
     </div>
     <button type="submit" class="btn btn-primary">Đăng nhập</button>
+    @if (!isLoginSuccess)
+    {
+        <h4>Đăng nhập không thành công</h4>
+    }
 </EditForm>
+<button class="btn btn-primary" @onclick="ClearLocalStorage">Clear</button>
 
 @code {
     UserLogin user = new UserLogin();
+    User currentUser = new User();
+    string key = "userInfo";
+    bool isLoginSuccess = true;
     public async Task HandleLogin()
     {
         _userViewModel.LoginName = user.LoginName;
         _userViewModel.LoginPassword = user.Password;
-        await _userViewModel.LoginUser();
-        NavigationManager.NavigateTo("/");
+        User currentUser = await _userViewModel.LoginUser();
+        if(currentUser != null)
+        {
+            SaveLocalStorage();
+            //NavigationManager.NavigateTo("/");
+        }
+        else isLoginSuccess = false;
+    }
+
+    public async void SaveLocalStorage()
+    {
+        await localStorage.SetItemAsync(key, user);
+    }
+    public async void ClearLocalStorage()
+    {
+        await localStorage.ClearAsync();
     }
 }

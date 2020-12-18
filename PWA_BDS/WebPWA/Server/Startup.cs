@@ -7,6 +7,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using WebPWA.Shared;
+using Blazored.LocalStorage;
 
 namespace WebPWA.Server
 {
@@ -26,6 +28,8 @@ namespace WebPWA.Server
 
             services.AddControllersWithViews();
             services.AddRazorPages();
+            services.AddSingleton<UserSession>();
+            services.AddBlazoredLocalStorage();
 
             services.AddAuthentication(option =>
             {

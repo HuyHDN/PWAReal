@@ -1,0 +1,166 @@
+﻿@page "/property/addproperty"
+@using Client.ViewModel
+@using WebPWA.Shared
+@inject NavigationManager NavigationManager
+@inject PropertyViewModel _propertyViewModel
+@inject IJSRuntime JSRuntime
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<h3>Đăng tin nhà đất</h3>
+@if (isLogin)
+{
+    <EditForm Model="@_propertyViewModel" OnValidSubmit="HandleAddProperty">
+        <DataAnnotationsValidator />
+        <div class="form-group">
+            <label for="email">Title</label>
+            <InputText id="email" @bind-Value="_propertyViewModel.Title" class="form-control" />
+            <ValidationMessage For="@(() => _propertyViewModel.Title)" />
+        </div>
+        <label>Loại</label>
+        <select @bind="_propertyViewModel.PropertyTypeID">
+            <option value="0">Phân mục</option>
+            @foreach (var type in lstPropertyType)
+            {
+                <option value="@type.ID">@type.Name</option>
+            }
+        </select>
+        <br />
+        <label>Tỉnh / Thành phố</label>
+        <select @onchange="CityChange">
+            <option value="0">Tỉnh / Thành phố</option>
+            @foreach (var city in lstCity)
+            {
+                <option value="@city.ID">@city.Name</option>
+            }
+        </select>
+        <br />
+        <label>Quận / Huyện</label>
+        <select @bind="_propertyViewModel.LocationID">
+            <option value="0">Quận / Huyện</option>
+            @foreach (var district in lstDistrict)
+            {
+                <option value="@district.ID">@district.Name</option>
+            }
+        </select>
+        <br />
+        <label>Phường / Xã</label>
+        <select @bind="selectedWardID">
+            <option value="0">Phường / Xã</option>
+            @foreach (var ward in lstWard)
+            {
+                <option value="@ward.ID">@ward.Name</option>
+            }
+        </select>
+        <br />
+        <div class="form-group">
+            <label>Chiều rộng</label>
+            <input type="text" min="0" decimal="true" numbersonly="true" numberonly="2" max="9999" @bind-value="_propertyViewModel.Width" class="form-control" />
+            <ValidationMessage For="@(() => _propertyViewModel.Width)" />
+        </div>
+        <div class="form-group">
+            <label>Chiều dài</label>
+            <InputNumber @bind-Value="_propertyViewModel.Length" class="form-control" />
+            <ValidationMessage For="@(() => _propertyViewModel.Length)" />
+        </div>
+        <div class="form-group">
+            <label>Diện tích</label>
+            <InputNumber @bind-Value="_propertyViewModel.Area" class="form-control" /> m2
+        </div>
+        <div class="form-group">
+            <label>Số kho</label>
+            <InputNumber @bind-Value="_propertyViewModel.NoOfStorey" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Số phòng</label>
+            <InputNumber @bind-Value="_propertyViewModel.NoOfRooms" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Số toilet</label>
+            <InputNumber @bind-Value="_propertyViewModel.NoOfToilets" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Mô tả chi tiết</label>
+            <InputTextArea @bind-Value="_propertyViewModel.Content" class="form-control" />
+        </div>
+        <input type="file" @ref="_input" @onchange="HandleSelected" accept=".jpg, .jpeg, png" /><br />
+        @if (ImgUrl != null)
+        {
+            <div>
+                <img src="@ImgUrl" style="width:300px" />
+            </div>
+            <br />
+        }
+        <button type="submit" class="btn btn-primary" style="margin-top:30px;margin-left:50px">Đăng tin</button>
+    </EditForm>
+}
+else
+{
+    <h2>Vui lòng đăng nhập để tiếp tục đăng tin</h2>
+}
+
+
+@code {
+    List<Code> lstPropertyType = new List<Code>();
+    List<Location> lstCity = new List<Location>();
+    List<Location> lstDistrict = new List<Location>();
+    List<Location> lstWard = new List<Location>();
+    Guid selectedCityID, selectedDistrictID, selectedWardID, selectedPropertyTypeID;
+    IFileListEntry file;
+    string key = "userInfo";
+    string imgSrc;
+    bool isLogin = false;
+    UserLogin currentUser = new UserLogin();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Task.Delay(2000);
+        currentUser = await localStorage.GetItemAsync<UserLogin>(key);
+        if (currentUser != null)
+        {
+            isLogin = true;
+            lstPropertyType = await _propertyViewModel.GetPropertyType();
+            lstCity = await _propertyViewModel.GetCity();
+            imgSrc = "Content/images/no-image-available-icon-7.jpg";
+        }
+
+    }
+
+    private async Task CityChange(ChangeEventArgs e)
+    {
+        selectedCityID = Guid.Parse(e.Value.ToString());
+        lstDistrict = await _propertyViewModel.GetDistrict(selectedCityID);
+        _propertyViewModel.LocationID = Guid.Empty;
+    }
+
+    private async Task HandleAddProperty()
+    {
+
+        await _propertyViewModel.CreateProperty();
+        NavigationManager.NavigateTo("/");
+    }
+
+    private async Task UploadClickEvent()
+    {
+        await JSRuntime.InvokeVoidAsync("UploadClickEvent");
+    }
+
+    private async Task UploadChange(IFileListEntry[] files)
+    {
+        file = files.FirstOrDefault();
+        if (file != null)
+        {
+            var memoryStream = new MemoryStream();
+            await file.Data.CopyToAsync(memoryStream);
+            imgSrc = "data:image/png;base64," + Convert.ToBase64String(memoryStream.ToArray(), 0, memoryStream.ToArray().Length);
+        }
+    }
+
+    private void ClearImage()
+    {
+        imgSrc = "Content/images/no-image-available-icon-7.jpg";
+    }
+}
+
+@code{
+
+}

@@ -34,6 +34,13 @@ namespace WebAPI_BDS.Service
             return userResponse;
         }
 
+        public async Task<ServiceResponse<User>> GetUserByLoginName(string name)
+        {
+            ServiceResponse<User> userResponse = new ServiceResponse<User>();
+            userResponse.Data = await _context.Users.Where(x => x.LoginName == name).FirstOrDefaultAsync();
+            return userResponse;
+        }
+
         public async Task<ServiceResponse<List<User>>> CreateNewUser(User newUser)
         {
             newUser.ID = System.Guid.NewGuid();
@@ -90,5 +97,7 @@ namespace WebAPI_BDS.Service
             }
             return userResponse;
         }
+
+        
     }
 }

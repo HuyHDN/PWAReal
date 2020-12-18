@@ -1,39 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 using WebPWA.Shared;
+
 namespace WebPWA.Client.ViewModel
 {
     public class PropertyViewModel
     {
         public Guid ID { get; set; }
+        [Required]
+        [StringLength(100, ErrorMessage = "Vui lòng nhập tiêu đề tin đăng của bạn. Tối thiểu là 30 ký tự và tối đa là 99 ký tự.", MinimumLength = 30)]
         public string Title { get; set; }
-        public string Image { get; set; }
-        public string Content { get; set; }
-        public DateTime ValidityDateFrom { get; set; }
-        public DateTime ValidityDateTo { get; set; }
         public float Width { get; set; }
         public float Length { get; set; }
-        public int NoOfStorey { get; set; }
-        public decimal PriceFrom { get; set; }
-        public decimal PriceTo { get; set; }
-        public Guid? PropertyTypeID { get; set; }
-        public Code PropertyType { get; set; }
         public float Area { get; set; }
+        public int NoOfStorey { get; set; }
         public int NoOfRooms { get; set; }
         public int NoOfToilets { get; set; }
+        public decimal PriceFrom { get; set; }
+        public decimal PriceTo { get; set; }
         public bool IsNegotiable { get; set; }
+        [Required]
+        public string Address { get; set; }
+        [Required]
+        [StringLength(3000, ErrorMessage = "Vui lòng nhập nội dung tin đăng của bạn. Tối thiểu là 30 ký tự và tối đa là 3000 ký tự.", MinimumLength = 30)]
+        public string Content { get; set; }
+        public string Image { get; set; }
+        [Required]
+        public Guid? PropertyTypeID { get; set; }
+        public Code PropertyType { get; set; }
         public Orientation Orientation { get; set; }
         public bool HasTitle { get; set; }
-        public string Address { get; set; }
+        [Required]
         public Guid LocationID { get; set; }
         public Location Location { get; set; }
         public Guid AdsID { get; set; }
-        public Code Ads { get; set; }
+        public Code Ads { get; set; } // loại tin
+        public DateTime ValidityDateFrom { get; set; }
+        public DateTime ValidityDateTo { get; set; }
         public Guid CreatedUserID { get; set; }
         public User CreatedUser { get; set; }
         public DateTime CreatedDateTime { get; set; }
@@ -82,10 +91,27 @@ namespace WebPWA.Client.ViewModel
             await httpClient.DeleteAsync("http://localhost:70/WebAPI/Property/DeleteProperty/" + id.ToString());
         }
 
+
         public async Task CreateProperty()
         {
             Property Property = this;
+            
             await httpClient.PostAsJsonAsync("http://localhost:70/WebAPI/Property/CreateProperty/", Property);
+        }
+
+        public async Task<string> UploadProductImage(MultipartFormDataContent content)
+        {
+            var postResult = await httpClient.PostAsync("http://localhost:70/WebAPI/Property/Upload", content);
+            var postContent = await postResult.Content.ReadAsStringAsync();
+            if (!postResult.IsSuccessStatusCode)
+            {
+                throw new ApplicationException(postContent);
+            }
+            else
+            {
+                var imgUrl = Path.Combine("http://localhost:70/", postContent);
+                return imgUrl;
+            }
         }
 
         private void LoadCurrentObject(PropertyViewModel PropertyViewModel)
@@ -95,6 +121,33 @@ namespace WebPWA.Client.ViewModel
             Address = PropertyViewModel.Address;
         }
 
+        public async Task<List<Code>> GetPropertyType()
+        {
+            ServiceResponse<List<Code>> lstPropertyType = new ServiceResponse<List<Code>>();
+            lstPropertyType = await httpClient.GetFromJsonAsync<ServiceResponse<List<Code>>>("http://localhost:70/WebAPI/Property/GetPropertyType");
+            if (lstPropertyType != null && lstPropertyType.Data != null)
+                return lstPropertyType.Data;
+            return null;
+        }
+
+        public async Task<List<Location>> GetCity()
+        {
+            ServiceResponse<List<Location>> lstCity = new ServiceResponse<List<Location>>();
+            lstCity = await httpClient.GetFromJsonAsync<ServiceResponse<List<Location>>>("http://localhost:70/WebAPI/Location/GetCity");
+            if (lstCity != null && lstCity.Data != null)
+                return lstCity.Data;
+            return null;
+        }
+
+        public async Task<List<Location>> GetDistrict(Guid id)
+        {
+            ServiceResponse<List<Location>> lstDistrict = new ServiceResponse<List<Location>>();
+            lstDistrict = await httpClient.GetFromJsonAsync<ServiceResponse<List<Location>>>("http://localhost:70/WebAPI/Location/GetDistrict/" + id.ToString());
+            if (lstDistrict != null && lstDistrict.Data != null)
+                return lstDistrict.Data;
+            return null;
+        }
+
         public static implicit operator PropertyViewModel(Property Property)
         {
             return new PropertyViewModel
@@ -102,17 +155,17 @@ namespace WebPWA.Client.ViewModel
                 Title = Property.Title,
                 Content = Property.Content,
                 Address = Property.Address
-        };
-    }
+            };
+        }
 
-    public static implicit operator Property(PropertyViewModel PropertyViewModel)
-    {
-        return new Property
+        public static implicit operator Property(PropertyViewModel PropertyViewModel)
         {
-            Title = PropertyViewModel.Title,
-            Content = PropertyViewModel.Content,
-            Address = PropertyViewModel.Address
-        };
+            return new Property
+            {
+                Title = PropertyViewModel.Title,
+                Content = PropertyViewModel.Content,
+                Address = PropertyViewModel.Address
+            };
+        }
     }
-}
 }

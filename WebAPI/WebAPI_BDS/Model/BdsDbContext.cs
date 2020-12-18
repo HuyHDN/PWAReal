@@ -35,6 +35,8 @@ namespace WebAPI_BDS.Model
 
             modelBuilder.Entity<Property>().Property(x => x.PriceFrom).HasPrecision(19, 4);
             modelBuilder.Entity<Property>().Property(x => x.PriceTo).HasPrecision(19, 4);
+            modelBuilder.Entity<Property>().Property(x => x.IsNegotiable).HasDefaultValue(true);
+            modelBuilder.Entity<Property>().Property(x => x.HasTitle).HasDefaultValue(true);
 
             modelBuilder.Entity<Property>()
                         .HasOne(p => p.PropertyType)

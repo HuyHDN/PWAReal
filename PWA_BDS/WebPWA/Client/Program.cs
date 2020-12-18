@@ -11,6 +11,8 @@ using WebPWA.Client.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using WebPWA.Client.ViewModel;
 using WebPWA.Shared;
+using Tewr.Blazor.FileReader;
+using Blazored.LocalStorage;
 
 namespace WebPWA.Client
 {
@@ -24,12 +26,16 @@ namespace WebPWA.Client
             builder.Services.AddAuthorizationCore();
 
             //builder.Services.AddTransient(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddScoped<AuthenticationStateProvider,CustomAuthenticationStateProvider>();
+            builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
             builder.Services.AddHttpClient<UserViewModel>
-                ("WebPWAClient",client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
+                ("WebPWAClient", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
             builder.Services.AddHttpClient<PropertyViewModel>
                 ("WebPWAClient", client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress));
-            builder.Services.AddSingleton<UserSession>();
+            builder.Services.AddTransient(sp => new HttpClient
+            {
+                BaseAddress = new Uri(builder.HostEnvironment.BaseAddress)
+            }).AddBlazoredLocalStorage();
+            builder.Services.AddFileReaderService(o => o.UseWasmSharedBuffer = true);
             await builder.Build().RunAsync();
         }
     }

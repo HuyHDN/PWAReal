@@ -19,6 +19,7 @@ namespace WebAPI_BDS.Service
         public async Task<ServiceResponse<List<Property>>> CreateNewProperty(Property newProperty)
         {
             newProperty.ID = System.Guid.NewGuid();
+            newProperty.CreatedDateTime = newProperty.LastModifiedDateTime = DateTime.Now;
             _context.Property.Add(newProperty);
             await _context.SaveChangesAsync();
             ServiceResponse<List<Property>> propertyResponse = new ServiceResponse<List<Property>>();
@@ -52,6 +53,13 @@ namespace WebAPI_BDS.Service
             return propertyResponse;
         }
 
+        public async Task<ServiceResponse<List<Code>>> GetPropertyType()
+        {
+            ServiceResponse<List<Code>> propertyResponse = new ServiceResponse<List<Code>>();
+            propertyResponse.Data = await _context.Code.Where(x => x.CodeType.Name == "PropertyTypeGroup").ToListAsync();
+            return propertyResponse;
+        }
+
         public async Task<ServiceResponse<Property>> UpdateProperty(Guid propertyID, Property property)
         {
             Property propertyToUpdate = await _context.Property.Where(x => x.ID == propertyID).FirstOrDefaultAsync();
@@ -64,6 +72,11 @@ namespace WebAPI_BDS.Service
                 Data = propertyToUpdate
             };
             return propertyResponse;
+        }
+
+        public Task<ServiceResponse<string>> UploadImage()
+        {
+            throw new NotImplementedException();
         }
     }
 }

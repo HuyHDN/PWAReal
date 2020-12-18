@@ -13,5 +13,7 @@ namespace WebAPI_BDS.Service
         Task<ServiceResponse<List<Property>>> CreateNewProperty(Property newProperty);
         Task<ServiceResponse<Property>> UpdateProperty(Guid propertyID, Property property);
         Task<ServiceResponse<List<Property>>> DeleteProperty(Guid propertyID);
+        Task<ServiceResponse<List<Code>>> GetPropertyType();
+        Task<ServiceResponse<string>> UploadImage();
     }
 }

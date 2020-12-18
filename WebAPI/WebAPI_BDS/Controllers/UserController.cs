@@ -39,6 +39,13 @@ namespace WebAPI_BDS.Controllers
             return Ok(await _userService.GetUserByID(id));
         }
 
+        [Route("GetUserByLoginName/{name}")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetUserByID(string name)
+        {
+            return Ok(await _userService.GetUserByLoginName(name));
+        }
+
         [Route("CreateUser")]
         [HttpPost]
         public async Task<IActionResult> CreateUser([FromBody] User user)
