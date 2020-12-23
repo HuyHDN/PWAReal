@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 export default class Navbar extends Component {
     render() {
@@ -39,9 +39,9 @@ export default class Navbar extends Component {
                     id="navbarDefault"
                   >
                     <ul className="navbar-nav">
-                      <li className="nav-item">
+                      <li className="nav-item"><Link to={"/"}>
                         <a className="nav-link active" href="/">Home
-                        </a>
+                        </a></Link>
                       </li>
 
                       <li className="nav-item">
@@ -49,15 +49,15 @@ export default class Navbar extends Component {
                           About
                         </a>
                       </li>
-                      <li className="nav-item">
+                      <li className="nav-item"><Link to={"/List"}>
                         <a className="nav-link" href="property-grid">
                           Property
-                        </a>
+                        </a></Link>
                       </li>
-                      <li className="nav-item">
+                      <li className="nav-item"><Link to={"/Details"}>
                         <a className="nav-link" href="blog-grid.html">
                           Blog
-                        </a>
+                        </a></Link>
                       </li>
                       <li className="nav-item dropdown">
                         <a
