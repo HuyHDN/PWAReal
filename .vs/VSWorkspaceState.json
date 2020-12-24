@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\WebAPI",
+    "\\WebAPI\\WebAPI_BDS",
+    "\\WebAPI\\WebAPI_BDS\\.config",
+    "\\WebAPI\\WebAPI_BDS\\Controllers"
+  ],
+  "SelectedNode": "\\WebAPI\\WebAPI_BDS\\Controllers\\UserController.cs",
+  "PreviewInSolutionExplorer": false
+}

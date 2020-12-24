@@ -25,13 +25,13 @@ namespace WebAPI_BDS.Controllers
             _userService = userService;
             _context = context;
         }
-
+        // Select all user
         [HttpGet("GetAllUser")]
         public async Task<IActionResult> GetAllUser()
         {
             return Ok(await _userService.GetAllUser());
         }
-
+        // Search user by ID
         [Route("GetUserByID/{id}")]
         [HttpGet("{id}")]
         public async Task<IActionResult> GetUserByID(Guid id)
