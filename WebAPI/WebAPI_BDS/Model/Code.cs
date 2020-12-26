@@ -13,5 +13,6 @@ namespace WebAPI_BDS.Model
         public Guid CodeTypeID { get; set; }
         public CodeType CodeType { get; set; }
         public string FullPath { get; set; }
+        
     }
 }
