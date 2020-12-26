@@ -37,8 +37,11 @@ namespace WebAPI_BDS.Model
         public Code Ads { get; set; }
         public Guid CreatedUserID { get; set; }
         public User CreatedUser { get; set; }
+        
         public DateTime CreatedDateTime { get; set; }
+
         public DateTime LastModifiedDateTime { get; set; }
+
         public DateTime SuccessedDateTime { get; set; }
         
     }
