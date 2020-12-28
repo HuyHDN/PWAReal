@@ -333,195 +333,197 @@ export default class Homepage extends Component {
           </div>
         </div>
         <div id="property-carousel" className="owl-carousel owl-theme owl-loaded owl-drag">
-          {/* <div className="owl-stage-outer">
-          </div>
-          <div className="owl-stage" style="transform: translate3d(-266px, 0px, 0px); transition: all 0s ease 0s; width: 1067px;">
-            </div>
-            <div className="owl-item cloned" style="width: 103.333px; margin-right: 30px;">
-              </div> */}
-          <div className="carousel-item-b">
-            <div className="card-box-a card-shadow">
-              <div className="img-box-a">
-                <img src="/assets/img/property-6.jpg" alt="" className="img-a img-fluid" />
-              </div>
-              <div className="card-overlay">
-                <div className="card-overlay-a-content">
-                  <div className="card-header-a">
-                    <h2 className="card-title-a">
-                      <a href="property-single.html">206 Mount
-                        <br /> Olive Road Two</a>
-                    </h2>
-                  </div>
-                  <div className="card-body-a">
-                    <div className="price-box d-flex">
-                      <span className="price-a">rent | $ 12.000</span>
+          <div className="owl-item cloned" style={{width: '540px', marginRight: '10px'}}>
+            <div className="carousel-item-b">
+              <div className="card-box-a card-shadow">
+                <div className="img-box-a">
+                  <img src="/assets/img/property-6.jpg" alt="" className="img-a img-fluid" />
+                </div>
+                <div className="card-overlay">
+                  <div className="card-overlay-a-content">
+                    <div className="card-header-a">
+                      <h2 className="card-title-a">
+                        <a href="property-single.html">206 Mount
+                          <br /> Olive Road Two</a>
+                      </h2>
                     </div>
-                    <a href="#" className="link-a">Click here to view
-                      <span className="ion-ios-arrow-forward" />
-                    </a>
-                  </div>
-                  <div className="card-footer-a">
-                    <ul className="card-info d-flex justify-content-around">
-                      <li>
-                        <h4 className="card-info-title">Area</h4>
-                        <span>340m
-                          <sup>2</sup>
-                        </span>
-                      </li>
-                      <li>
-                        <h4 className="card-info-title">Beds</h4>
-                        <span>2</span>
-                      </li>
-                      <li>
-                        <h4 className="card-info-title">Baths</h4>
-                        <span>4</span>
-                      </li>
-                      <li>
-                        <h4 className="card-info-title">Garages</h4>
-                        <span>1</span>
-                      </li>
-                    </ul>
+                    <div className="card-body-a">
+                      <div className="price-box d-flex">
+                        <span className="price-a">rent | $ 12.000</span>
+                      </div>
+                      <a href="#" className="link-a">Click here to view
+                        <span className="ion-ios-arrow-forward" />
+                      </a>
+                    </div>
+                    <div className="card-footer-a">
+                      <ul className="card-info d-flex justify-content-around">
+                        <li>
+                          <h4 className="card-info-title">Area</h4>
+                          <span>340m
+                            <sup>2</sup>
+                          </span>
+                        </li>
+                        <li>
+                          <h4 className="card-info-title">Beds</h4>
+                          <span>2</span>
+                        </li>
+                        <li>
+                          <h4 className="card-info-title">Baths</h4>
+                          <span>4</span>
+                        </li>
+                        <li>
+                          <h4 className="card-info-title">Garages</h4>
+                          <span>1</span>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="carousel-item-b">
-            <div className="card-box-a card-shadow">
-              <div className="img-box-a">
-                <img src="assets/img/property-3.jpg" alt="" className="img-a img-fluid" />
-              </div>
-              <div className="card-overlay">
-                <div className="card-overlay-a-content">
-                  <div className="card-header-a">
-                    <h2 className="card-title-a">
-                      <a href="property-single.html">157 West
-                        <br /> Central Park</a>
-                    </h2>
-                  </div>
-                  <div className="card-body-a">
-                    <div className="price-box d-flex">
-                      <span className="price-a">rent | $ 12.000</span>
+            </div>
+            <div className="owl-item cloned" style={{width: '540px', marginRight: '10px'}}>
+            <div className="carousel-item-b">
+              <div className="card-box-a card-shadow">
+                <div className="img-box-a">
+                  <img src="assets/img/property-3.jpg" alt="" className="img-a img-fluid" />
+                </div>
+                <div className="card-overlay">
+                  <div className="card-overlay-a-content">
+                    <div className="card-header-a">
+                      <h2 className="card-title-a">
+                        <a href="property-single.html">157 West
+                          <br /> Central Park</a>
+                      </h2>
                     </div>
-                    <a href="property-single.html" className="link-a">Click here to view
-                      <span className="ion-ios-arrow-forward" />
-                    </a>
-                  </div>
-                  <div className="card-footer-a">
-                    <ul className="card-info d-flex justify-content-around">
-                      <li>
-                        <h4 className="card-info-title">Area</h4>
-                        <span>340m
-                          <sup>2</sup>
-                        </span>
-                      </li>
-                      <li>
-                        <h4 className="card-info-title">Beds</h4>
-                        <span>2</span>
-                      </li>
-                      <li>
-                        <h4 className="card-info-title">Baths</h4>
-                        <span>4</span>
-                      </li>
-                      <li>
-                        <h4 className="card-info-title">Garages</h4>
-                        <span>1</span>
-                      </li>
-                    </ul>
+                    <div className="card-body-a">
+                      <div className="price-box d-flex">
+                        <span className="price-a">rent | $ 12.000</span>
+                      </div>
+                      <a href="property-single.html" className="link-a">Click here to view
+                        <span className="ion-ios-arrow-forward" />
+                      </a>
+                    </div>
+                    <div className="card-footer-a">
+                      <ul className="card-info d-flex justify-content-around">
+                        <li>
+                          <h4 className="card-info-title">Area</h4>
+                          <span>340m
+                            <sup>2</sup>
+                          </span>
+                        </li>
+                        <li>
+                          <h4 className="card-info-title">Beds</h4>
+                          <span>2</span>
+                        </li>
+                        <li>
+                          <h4 className="card-info-title">Baths</h4>
+                          <span>4</span>
+                        </li>
+                        <li>
+                          <h4 className="card-info-title">Garages</h4>
+                          <span>1</span>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="carousel-item-b">
-            <div className="card-box-a card-shadow">
-              <div className="img-box-a">
-                <img src="assets/img/property-7.jpg" alt="" className="img-a img-fluid" />
-              </div>
-              <div className="card-overlay">
-                <div className="card-overlay-a-content">
-                  <div className="card-header-a">
-                    <h2 className="card-title-a">
-                      <a href="property-single.html">245 Azabu
-                        <br /> Nishi Park let</a>
-                    </h2>
-                  </div>
-                  <div className="card-body-a">
-                    <div className="price-box d-flex">
-                      <span className="price-a">rent | $ 12.000</span>
+            </div>
+            <div className="owl-item cloned" style={{width: '540px', marginRight: '10px'}}>
+            <div className="carousel-item-b">
+              <div className="card-box-a card-shadow">
+                <div className="img-box-a">
+                  <img src="assets/img/property-7.jpg" alt="" className="img-a img-fluid" />
+                </div>
+                <div className="card-overlay">
+                  <div className="card-overlay-a-content">
+                    <div className="card-header-a">
+                      <h2 className="card-title-a">
+                        <a href="property-single.html">245 Azabu
+                          <br /> Nishi Park let</a>
+                      </h2>
                     </div>
-                    <a href="property-single.html" className="link-a">Click here to view
-                      <span className="ion-ios-arrow-forward" />
-                    </a>
-                  </div>
-                  <div className="card-footer-a">
-                    <ul className="card-info d-flex justify-content-around">
-                      <li>
-                        <h4 className="card-info-title">Area</h4>
-                        <span>340m
-                          <sup>2</sup>
-                        </span>
-                      </li>
-                      <li>
-                        <h4 className="card-info-title">Beds</h4>
-                        <span>2</span>
-                      </li>
-                      <li>
-                        <h4 className="card-info-title">Baths</h4>
-                        <span>4</span>
-                      </li>
-                      <li>
-                        <h4 className="card-info-title">Garages</h4>
-                        <span>1</span>
-                      </li>
-                    </ul>
+                    <div className="card-body-a">
+                      <div className="price-box d-flex">
+                        <span className="price-a">rent | $ 12.000</span>
+                      </div>
+                      <a href="property-single.html" className="link-a">Click here to view
+                        <span className="ion-ios-arrow-forward" />
+                      </a>
+                    </div>
+                    <div className="card-footer-a">
+                      <ul className="card-info d-flex justify-content-around">
+                        <li>
+                          <h4 className="card-info-title">Area</h4>
+                          <span>340m
+                            <sup>2</sup>
+                          </span>
+                        </li>
+                        <li>
+                          <h4 className="card-info-title">Beds</h4>
+                          <span>2</span>
+                        </li>
+                        <li>
+                          <h4 className="card-info-title">Baths</h4>
+                          <span>4</span>
+                        </li>
+                        <li>
+                          <h4 className="card-info-title">Garages</h4>
+                          <span>1</span>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="carousel-item-b">
-            <div className="card-box-a card-shadow">
-              <div className="img-box-a">
-                <img src="assets/img/property-10.jpg" alt="" className="img-a img-fluid" />
-              </div>
-              <div className="card-overlay">
-                <div className="card-overlay-a-content">
-                  <div className="card-header-a">
-                    <h2 className="card-title-a">
-                      <a href="property-single.html">204 Montal
-                        <br /> South Bela Two</a>
-                    </h2>
-                  </div>
-                  <div className="card-body-a">
-                    <div className="price-box d-flex">
-                      <span className="price-a">rent | $ 12.000</span>
+            </div>
+            <div className="owl-item cloned" style={{width: '540px', marginRight: '10px'}}>
+            <div className="carousel-item-b">
+              <div className="card-box-a card-shadow">
+                <div className="img-box-a">
+                  <img src="assets/img/property-10.jpg" alt="" className="img-a img-fluid" />
+                </div>
+                <div className="card-overlay">
+                  <div className="card-overlay-a-content">
+                    <div className="card-header-a">
+                      <h2 className="card-title-a">
+                        <a href="property-single.html">204 Montal
+                          <br /> South Bela Two</a>
+                      </h2>
                     </div>
-                    <a href="property-single.html" className="link-a">Click here to view
-                      <span className="ion-ios-arrow-forward" />
-                    </a>
-                  </div>
-                  <div className="card-footer-a">
-                    <ul className="card-info d-flex justify-content-around">
-                      <li>
-                        <h4 className="card-info-title">Area</h4>
-                        <span>340m
-                          <sup>2</sup>
-                        </span>
-                      </li>
-                      <li>
-                        <h4 className="card-info-title">Beds</h4>
-                        <span>2</span>
-                      </li>
-                      <li>
-                        <h4 className="card-info-title">Baths</h4>
-                        <span>4</span>
-                      </li>
-                      <li>
-                        <h4 className="card-info-title">Garages</h4>
-                        <span>1</span>
-                      </li>
-                    </ul>
+                    <div className="card-body-a">
+                      <div className="price-box d-flex">
+                        <span className="price-a">rent | $ 12.000</span>
+                      </div>
+                      <a href="property-single.html" className="link-a">Click here to view
+                        <span className="ion-ios-arrow-forward" />
+                      </a>
+                    </div>
+                    <div className="card-footer-a">
+                      <ul className="card-info d-flex justify-content-around">
+                        <li>
+                          <h4 className="card-info-title">Area</h4>
+                          <span>340m
+                            <sup>2</sup>
+                          </span>
+                        </li>
+                        <li>
+                          <h4 className="card-info-title">Beds</h4>
+                          <span>2</span>
+                        </li>
+                        <li>
+                          <h4 className="card-info-title">Baths</h4>
+                          <span>4</span>
+                        </li>
+                        <li>
+                          <h4 className="card-info-title">Garages</h4>
+                          <span>1</span>
+                        </li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -530,8 +532,6 @@ export default class Homepage extends Component {
         </div>
       </div>
     </section>{/* End Latest Properties Section */}
-
-    
     
     {/* ======= Agents Section ======= */}
     <section className="section-agents section-t8">
@@ -731,6 +731,7 @@ export default class Homepage extends Component {
         </div>
       </div>
     </section>{/* End Agents Section */}
+    
     {/* ======= Latest News Section ======= */}
     <section className="section-news section-t8">
       <div className="container">
@@ -748,94 +749,102 @@ export default class Homepage extends Component {
             </div>
           </div>
         </div>
-        <div id="new-carousel" className="owl-carousel owl-theme">
-          <div className="carousel-item-c">
-            <div className="card-box-b card-shadow news-box">
-              <div className="img-box-b">
-                <img src="assets/img/post-2.jpg" alt="" className="img-b img-fluid" />
-              </div>
-              <div className="card-overlay">
-                <div className="card-header-b">
-                  <div className="card-category-b">
-                    <a href="#" className="category-b">House</a>
-                  </div>
-                  <div className="card-title-b">
-                    <h2 className="title-2">
-                      <a href="blog-single.html">House is comming
-                        <br /> new</a>
-                    </h2>
-                  </div>
-                  <div className="card-date">
-                    <span className="date-b">18 Sep. 2017</span>
+        <div>
+          <div className="owl-item cloned" style={{width: '500px', marginRight: '10px'}}>
+            <div className="carousel-item-c">
+              <div className="card-box-b card-shadow news-box">
+                <div className="img-box-b">
+                  <img src="assets/img/post-2.jpg" alt="" className="img-b img-fluid" />
+                </div>
+                <div className="card-overlay">
+                  <div className="card-header-b">
+                    <div className="card-category-b">
+                      <a href="#" className="category-b">House</a>
+                    </div>
+                    <div className="card-title-b">
+                      <h2 className="title-2">
+                        <a href="blog-single.html">House is comming
+                          <br /> new</a>
+                      </h2>
+                    </div>
+                    <div className="card-date">
+                      <span className="date-b">18 Sep. 2017</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="carousel-item-c">
-            <div className="card-box-b card-shadow news-box">
-              <div className="img-box-b">
-                <img src="assets/img/post-5.jpg" alt="" className="img-b img-fluid" />
-              </div>
-              <div className="card-overlay">
-                <div className="card-header-b">
-                  <div className="card-category-b">
-                    <a href="#" className="category-b">Travel</a>
-                  </div>
-                  <div className="card-title-b">
-                    <h2 className="title-2">
-                      <a href="blog-single.html">Travel is comming
-                        <br /> new</a>
-                    </h2>
-                  </div>
-                  <div className="card-date">
-                    <span className="date-b">18 Sep. 2017</span>
+          <div className="owl-item cloned" style={{width: '500px', marginRight: '10px'}}>
+            <div className="carousel-item-c">
+              <div className="card-box-b card-shadow news-box">
+                <div className="img-box-b">
+                  <img src="assets/img/post-5.jpg" alt="" className="img-b img-fluid" />
+                </div>
+                <div className="card-overlay">
+                  <div className="card-header-b">
+                    <div className="card-category-b">
+                      <a href="#" className="category-b">Travel</a>
+                    </div>
+                    <div className="card-title-b">
+                      <h2 className="title-2">
+                        <a href="blog-single.html">Travel is comming
+                          <br /> new</a>
+                      </h2>
+                    </div>
+                    <div className="card-date">
+                      <span className="date-b">18 Sep. 2017</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="carousel-item-c">
-            <div className="card-box-b card-shadow news-box">
-              <div className="img-box-b">
-                <img src="assets/img/post-7.jpg" alt="" className="img-b img-fluid" />
-              </div>
-              <div className="card-overlay">
-                <div className="card-header-b">
-                  <div className="card-category-b">
-                    <a href="#" className="category-b">Park</a>
-                  </div>
-                  <div className="card-title-b">
-                    <h2 className="title-2">
-                      <a href="blog-single.html">Park is comming
-                        <br /> new</a>
-                    </h2>
-                  </div>
-                  <div className="card-date">
-                    <span className="date-b">18 Sep. 2017</span>
+          <div className="owl-item cloned" style={{width: '500px', marginRight: '10px'}}>
+            <div className="carousel-item-c">
+              <div className="card-box-b card-shadow news-box">
+                <div className="img-box-b">
+                  <img src="assets/img/post-7.jpg" alt="" className="img-b img-fluid" />
+                </div>
+                <div className="card-overlay">
+                  <div className="card-header-b">
+                    <div className="card-category-b">
+                      <a href="#" className="category-b">Park</a>
+                    </div>
+                    <div className="card-title-b">
+                      <h2 className="title-2">
+                        <a href="blog-single.html">Park is comming
+                          <br /> new</a>
+                      </h2>
+                    </div>
+                    <div className="card-date">
+                      <span className="date-b">18 Sep. 2017</span>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <div className="carousel-item-c">
-            <div className="card-box-b card-shadow news-box">
-              <div className="img-box-b">
-                <img src="assets/img/post-3.jpg" alt="" className="img-b img-fluid" />
-              </div>
-              <div className="card-overlay">
-                <div className="card-header-b">
-                  <div className="card-category-b">
-                    <a href="#" className="category-b">Travel</a>
-                  </div>
-                  <div className="card-title-b">
-                    <h2 className="title-2">
-                      <a href="#">Travel is comming
-                        <br /> new</a>
-                    </h2>
-                  </div>
-                  <div className="card-date">
-                    <span className="date-b">18 Sep. 2017</span>
+          <div className="owl-item cloned" style={{width: '500px', marginRight: '10px'}}>
+            <div className="carousel-item-c">
+              <div className="card-box-b card-shadow news-box">
+                <div className="img-box-b">
+                  <img src="assets/img/post-3.jpg" alt="" className="img-b img-fluid" />
+                </div>
+                <div className="card-overlay">
+                  <div className="card-header-b">
+                    <div className="card-category-b">
+                      <a href="#" className="category-b">Travel</a>
+                    </div>
+                    <div className="card-title-b">
+                      <h2 className="title-2">
+                        <a href="#">Travel is comming
+                          <br /> new</a>
+                      </h2>
+                    </div>
+                    <div className="card-date">
+                      <span className="date-b">18 Sep. 2017</span>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -844,6 +853,8 @@ export default class Homepage extends Component {
         </div>
       </div>
     </section>{/* End Latest News Section */}
+
+    
     {/* ======= Testimonials Section ======= */}
     <section className="section-testimonials section-t8 nav-arrow-a">
       <div className="container">
@@ -856,7 +867,7 @@ export default class Homepage extends Component {
             </div>
           </div>
         </div>
-        <div id="testimonial-carousel" className="owl-carousel owl-arrow">
+        <div id="testimonial-carousel">
           <div className="carousel-item-a">
             <div className="testimonials-box">
               <div className="row">
