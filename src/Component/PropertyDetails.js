@@ -14,7 +14,7 @@ export default class PropertyDetails extends Component {
         <link href="assets/img/favicon.png" rel="icon" />
         <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
         {/* Google Fonts */}
-        <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet" />
+        {/* <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet" /> */}
         {/* Vendor CSS Files */}
         
         {/* Template Main CSS File */}
@@ -396,7 +396,7 @@ export default class PropertyDetails extends Component {
         </main>{/* End #main */}
 
         <a href="#" className="back-to-top"><i className="fa fa-chevron-up" /></a>
-        <div id="preloader" />
+
         {/* Vendor JS Files */}
         {/* Template Main JS File */}
       </div>
