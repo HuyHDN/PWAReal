@@ -9,7 +9,7 @@ import LatestProps from '../Component/LatestProps';
 import Agents from '../Component/Agents';
 import Testimonial from '../Component/Testimonials';
 import LatestNews from '../Component/LatestNews';
-import PropertyDetails from '../Component/PropertyDetails'
+import PropertyLists from '../Component/PropertyList'
 import Footer from '../Component/FooterPage';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -27,11 +27,11 @@ export default class Homepage extends Component {
         <div className="click-closed" />
         <SearchBar />
         <Navbar />
-        <Intro /> 
         <main id="main">
           <Router>
             <Switch>
               <Route exact path="/">
+                <Intro /> 
                 <Service />
                 <LatestProps />
                 <Agents />
@@ -42,7 +42,7 @@ export default class Homepage extends Component {
                 <Intro />
               </Route>
               <Route path="/property-grid">
-                <PropertyDetails />
+                <PropertyLists />
               </Route>
             </Switch>
           </Router>
