@@ -19,7 +19,9 @@ namespace WebAPI_BDS.Service
         public async Task<ServiceResponse<List<Property>>> CreateNewProperty(Property newProperty)
         {
             newProperty.ID = System.Guid.NewGuid();
-            newProperty.CreatedDateTime = newProperty.LastModifiedDateTime = DateTime.Now;
+            newProperty.CreatedDateTime = newProperty.LastModifiedDateTime = newProperty.SuccessedDateTime = DateTime.Now;
+            newProperty.AdsID = Guid.Parse("6c7b943a-4d3d-495c-89e5-2535bafe3eed");
+            newProperty.Status = (int)Status.CHỜ_DUYỆT;
             _context.Property.Add(newProperty);
             await _context.SaveChangesAsync();
             ServiceResponse<List<Property>> propertyResponse = new ServiceResponse<List<Property>>();
@@ -57,6 +59,20 @@ namespace WebAPI_BDS.Service
         {
             ServiceResponse<List<Code>> propertyResponse = new ServiceResponse<List<Code>>();
             propertyResponse.Data = await _context.Code.Where(x => x.CodeType.Name == "PropertyTypeGroup").ToListAsync();
+            return propertyResponse;
+        }
+
+        public async Task<ServiceResponse<List<Code>>> GetOrientation()
+        {
+            ServiceResponse<List<Code>> propertyResponse = new ServiceResponse<List<Code>>();
+            propertyResponse.Data = await _context.Code.Where(x => x.CodeType.Name == "Orientation").ToListAsync();
+            return propertyResponse;
+        }
+
+        public async Task<ServiceResponse<List<Code>>> GetNewType()
+        {
+            ServiceResponse<List<Code>> propertyResponse = new ServiceResponse<List<Code>>();
+            propertyResponse.Data = await _context.Code.Where(x => x.CodeType.Name == "AdsType").ToListAsync();
             return propertyResponse;
         }
 

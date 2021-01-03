@@ -5,26 +5,26 @@
 @if (isLogin)
 {
     <div class="top-row px-4">
-        <h4><b>Hello @fullName</b></h4>
-        <button class="btn btn-danger" @onclick="LogoutUser">Logout</button>
+        <h4><b>Xin chào @fullName</b></h4>
+        <button class="btn btn-danger" @onclick="LogoutUser">Đăng xuất</button>
     </div>
 }
 else
 {
     <div class="top-row px-4">
-        <button class="btn btn-danger" @onclick="LoginUser">Login</button>
+        <button class="btn btn-danger" @onclick="LoginUser">Đăng nhập</button>
     </div>
 }
 
 @code {
-    UserLogin currentUser = new UserLogin();
+    UserSession currentUser = new UserSession();
     string key = "userInfo";
     string fullName;
     bool isLogin = false;
 
     protected override async Task OnInitializedAsync()
     {
-        currentUser = await localStorage.GetItemAsync<UserLogin>(key);
+        currentUser = await localStorage.GetItemAsync<UserSession>(key);
         if (currentUser != null)
         {
             isLogin = true;

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebAPI_BDS.Model;
 
 namespace WebAPI_BDS.Migrations
 {
     [DbContext(typeof(BdsDbContext))]
-    partial class BdsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20201201102057_updateProperty")]
+    partial class updateProperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -207,9 +209,6 @@ namespace WebAPI_BDS.Migrations
 
                     b.Property<Guid?>("PropertyTypeID")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
 
                     b.Property<DateTime>("SuccessedDateTime")
                         .HasColumnType("datetime2");

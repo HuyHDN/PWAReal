@@ -15,24 +15,26 @@ namespace WebPWA.Shared
         public string Content { get; set; }
         public DateTime ValidityDateFrom { get; set; }
         public DateTime ValidityDateTo { get; set; }
-        public float Width { get; set; }
-        public float Length { get; set; }
-        public int NoOfStorey { get; set; }
-        public decimal PriceFrom { get; set; }
-        public decimal PriceTo { get; set; }
+        public float? Width { get; set; }
+        public float? Length { get; set; }
+        public int? NoOfStorey { get; set; }
+        public decimal? PriceFrom { get; set; }
+        public decimal? PriceTo { get; set; }
         public Guid? PropertyTypeID { get; set; }
         public Code PropertyType { get; set; }
-        public float Area { get; set; }
-        public int NoOfRooms { get; set; }
-        public int NoOfToilets { get; set; }
-        public bool IsNegotiable { get; set; }
-        public Orientation Orientation { get; set; }
-        public bool HasTitle { get; set; }
+        public float? Area { get; set; }
+        public int? NoOfRooms { get; set; }
+        public int? NoOfToilets { get; set; }
+        public bool? IsNegotiable { get; set; }
+        public Guid? OrientationID { get; set; }
+        public Code Orientation { get; set; }
+        public bool? HasTitle { get; set; }
         public string Address { get; set; }
         public Guid LocationID { get; set; }
         public Location Location { get; set; }
         public Guid AdsID { get; set; }
         public Code Ads { get; set; }
+        public int Status { get; set; }
         public Guid CreatedUserID { get; set; }
         public User CreatedUser { get; set; }
         public DateTime CreatedDateTime { get; set; }

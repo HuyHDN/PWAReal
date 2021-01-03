@@ -34,13 +34,14 @@ namespace WebPWA.Client.ViewModel
         [Required]
         public Guid? PropertyTypeID { get; set; }
         public Code PropertyType { get; set; }
-        public Orientation Orientation { get; set; }
+        public Guid? OrientationID { get; set; }
         public bool HasTitle { get; set; }
         [Required]
         public Guid LocationID { get; set; }
         public Location Location { get; set; }
         public Guid AdsID { get; set; }
         public Code Ads { get; set; } // loại tin
+        public int Status { get; set; }
         public DateTime ValidityDateFrom { get; set; }
         public DateTime ValidityDateTo { get; set; }
         public Guid CreatedUserID { get; set; }
@@ -130,6 +131,24 @@ namespace WebPWA.Client.ViewModel
             return null;
         }
 
+        public async Task<List<Code>> GetOrientation()
+        {
+            ServiceResponse<List<Code>> lstOrientation = new ServiceResponse<List<Code>>();
+            lstOrientation = await httpClient.GetFromJsonAsync<ServiceResponse<List<Code>>>("http://localhost:70/WebAPI/Property/GetOrientation");
+            if (lstOrientation != null && lstOrientation.Data != null)
+                return lstOrientation.Data;
+            return null;
+        }
+
+        public async Task<List<Code>> GetNewType()
+        {
+            ServiceResponse<List<Code>> lstAds = new ServiceResponse<List<Code>>();
+            lstAds = await httpClient.GetFromJsonAsync<ServiceResponse<List<Code>>>("http://localhost:70/WebAPI/Property/GetNewType");
+            if (lstAds != null && lstAds.Data != null)
+                return lstAds.Data;
+            return null;
+        }
+
         public async Task<List<Location>> GetCity()
         {
             ServiceResponse<List<Location>> lstCity = new ServiceResponse<List<Location>>();
@@ -145,6 +164,15 @@ namespace WebPWA.Client.ViewModel
             lstDistrict = await httpClient.GetFromJsonAsync<ServiceResponse<List<Location>>>("http://localhost:70/WebAPI/Location/GetDistrict/" + id.ToString());
             if (lstDistrict != null && lstDistrict.Data != null)
                 return lstDistrict.Data;
+            return null;
+        }
+
+        public async Task<List<Location>> GetWard(Guid id)
+        {
+            ServiceResponse<List<Location>> lstWard = new ServiceResponse<List<Location>>();
+            lstWard = await httpClient.GetFromJsonAsync<ServiceResponse<List<Location>>>("http://localhost:70/WebAPI/Location/GetWard/" + id.ToString());
+            if (lstWard != null && lstWard.Data != null)
+                return lstWard.Data;
             return null;
         }
 
@@ -164,7 +192,24 @@ namespace WebPWA.Client.ViewModel
             {
                 Title = PropertyViewModel.Title,
                 Content = PropertyViewModel.Content,
-                Address = PropertyViewModel.Address
+                Address = PropertyViewModel.Address,
+                AdsID = PropertyViewModel.AdsID,
+                Area = PropertyViewModel.Area,
+                CreatedUserID = PropertyViewModel.CreatedUserID,
+                Image = PropertyViewModel.Image,
+                LocationID = PropertyViewModel.LocationID,
+                Length = PropertyViewModel.Length,
+                Width = PropertyViewModel.Width,
+                NoOfRooms = PropertyViewModel.NoOfRooms,
+                NoOfStorey = PropertyViewModel.NoOfStorey,
+                NoOfToilets = PropertyViewModel.NoOfToilets,
+                PriceFrom = PropertyViewModel.PriceFrom,
+                PriceTo = PropertyViewModel.PriceTo,
+                PropertyTypeID = PropertyViewModel.PropertyTypeID,
+                Status = PropertyViewModel.Status,
+                ValidityDateFrom = PropertyViewModel.ValidityDateFrom,
+                ValidityDateTo = PropertyViewModel.ValidityDateTo,
+                OrientationID = PropertyViewModel.OrientationID
             };
         }
     }

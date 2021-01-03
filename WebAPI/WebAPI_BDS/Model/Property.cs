@@ -7,7 +7,7 @@ namespace WebAPI_BDS.Model
     }
     public enum Status
     {
-        HẾT_HẠN, ĐÃ_BÁN, CHÍNH_CHỦ, MÔI_GIỚI, VIP, THƯỜNG, HOT
+        CHỜ_DUYỆT, ĐÃ_DUYỆT, HẾT_HẠN, ĐÃ_BÁN, CHÍNH_CHỦ, MÔI_GIỚI
     }
     public class Property
     {
@@ -28,13 +28,15 @@ namespace WebAPI_BDS.Model
         public int? NoOfRooms { get; set; }
         public int? NoOfToilets { get; set; }
         public bool? IsNegotiable { get; set; }
-        public Orientation Orientation { get; set; }
+        public Guid? OrientationID { get; set; }
+        public Code Orientation { get; set; }
         public bool? HasTitle { get; set; }
         public string Address { get; set; }
         public Guid LocationID { get; set; }
         public Location Location { get; set; }
         public Guid AdsID { get; set; }
         public Code Ads { get; set; }
+        public int Status { get; set; }
         public Guid CreatedUserID { get; set; }
         public User CreatedUser { get; set; }
         public DateTime CreatedDateTime { get; set; }

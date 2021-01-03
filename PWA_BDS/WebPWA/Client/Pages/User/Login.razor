@@ -14,7 +14,7 @@
         <InputText id="username" @bind-Value="user.LoginName" class="form-control" />
     </div>
     <div class="form-group">
-        <label for="password">User Name</label>
+        <label for="password">Password</label>
         <InputText id="password" @bind-Value="user.Password" type="password" class="form-control" />
     </div>
     <button type="submit" class="btn btn-primary">Đăng nhập</button>
@@ -23,11 +23,11 @@
         <h4>Đăng nhập không thành công</h4>
     }
 </EditForm>
-<button class="btn btn-primary" @onclick="ClearLocalStorage">Clear</button>
 
 @code {
     UserLogin user = new UserLogin();
     User currentUser = new User();
+    UserSession userSession = new UserSession();
     string key = "userInfo";
     bool isLoginSuccess = true;
     public async Task HandleLogin()
@@ -37,18 +37,16 @@
         User currentUser = await _userViewModel.LoginUser();
         if(currentUser != null)
         {
+            userSession.LoginName = user.LoginName;
+            userSession.RoleCode = await _userViewModel.GetUserRole(currentUser.ID);
             SaveLocalStorage();
-            //NavigationManager.NavigateTo("/");
+            NavigationManager.NavigateTo("/",true);
         }
         else isLoginSuccess = false;
     }
 
     public async void SaveLocalStorage()
     {
-        await localStorage.SetItemAsync(key, user);
-    }
-    public async void ClearLocalStorage()
-    {
-        await localStorage.ClearAsync();
+        await localStorage.SetItemAsync(key, userSession);
     }
 }

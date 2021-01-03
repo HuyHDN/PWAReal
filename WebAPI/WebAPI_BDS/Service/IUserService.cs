@@ -15,6 +15,6 @@ namespace WebAPI_BDS.Service
         Task<ServiceResponse<User>> UpdateUser(Guid id,User user);
         Task<ServiceResponse<List<User>>> DeleteUser(Guid id);
         Task<ServiceResponse<User>> LoginUser(User user);
-        
+        Task<ServiceResponse<string>> GetUserRole(Guid userID);
     }
 }

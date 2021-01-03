@@ -14,6 +14,8 @@ namespace WebAPI_BDS.Service
         Task<ServiceResponse<Property>> UpdateProperty(Guid propertyID, Property property);
         Task<ServiceResponse<List<Property>>> DeleteProperty(Guid propertyID);
         Task<ServiceResponse<List<Code>>> GetPropertyType();
+        Task<ServiceResponse<List<Code>>> GetOrientation();
+        Task<ServiceResponse<List<Code>>> GetNewType();
         Task<ServiceResponse<string>> UploadImage();
     }
 }

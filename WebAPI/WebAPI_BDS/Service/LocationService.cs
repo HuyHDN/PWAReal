@@ -31,17 +31,17 @@ namespace WebAPI_BDS.Service
             return locationResponse;
         }
 
-        public async Task<ServiceResponse<Location>> GetLocationByID(string locationID)
-        {
-            ServiceResponse<Location> locationResponse = new ServiceResponse<Location>();
-            locationResponse.Data = await _context.Location.Where(x => x.ID == Guid.Parse(locationID)).FirstOrDefaultAsync();
-            return locationResponse;
-        }
-
         public async Task<ServiceResponse<List<Location>>> GetWard(string DistrictID)
         {
             ServiceResponse<List<Location>> locationResponse = new ServiceResponse<List<Location>>();
             locationResponse.Data = await _context.Location.Where(x => x.LocationType.Name == "Ward" && x.ParentID == Guid.Parse(DistrictID)).ToListAsync();
+            return locationResponse;
+        }
+
+        public async Task<ServiceResponse<Location>> GetLocationByID(string locationID)
+        {
+            ServiceResponse<Location> locationResponse = new ServiceResponse<Location>();
+            locationResponse.Data = await _context.Location.Where(x => x.ID == Guid.Parse(locationID)).FirstOrDefaultAsync();
             return locationResponse;
         }
     }

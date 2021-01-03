@@ -6,6 +6,7 @@ namespace WebPWA.Shared
 {
     public class UserSession
     {
-        public User CurrentUser { get; set; }
+        public string LoginName { get; set; }
+        public string RoleCode { get; set; }
     }
 }

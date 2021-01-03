@@ -41,7 +41,7 @@ namespace WebAPI_BDS.Controllers
 
         [Route("GetUserByLoginName/{name}")]
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetUserByID(string name)
+        public async Task<IActionResult> GetUserByLoginName(string name)
         {
             return Ok(await _userService.GetUserByLoginName(name));
         }
@@ -75,6 +75,13 @@ namespace WebAPI_BDS.Controllers
             var claimPrincipal = new ClaimsPrincipal(claimIdentity);
             await HttpContext.SignInAsync(claimPrincipal);
             return await Task.FromResult(userToLogin);
+        }
+
+        [Route("GetRoleByUser/{id}")]
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetRoleByUser(Guid id)
+        {
+            return Ok(await _userService.GetUserRole(id));
         }
     }
 }

@@ -61,7 +61,7 @@ namespace WebAPI_BDS
             
 
             app.UseCors(
-                    options => options.WithOrigins("http://localhost:5000", "https://localhost:44345").AllowAnyMethod().AllowAnyHeader()
+                    options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
                 );
 
             app.UseAuthorization();

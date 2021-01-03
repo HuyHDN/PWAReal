@@ -31,6 +31,18 @@ namespace WebAPI_BDS.Controllers
             return Ok(await _propertyService.GetPropertyType());
         }
 
+        [HttpGet("GetOrientation")]
+        public async Task<IActionResult> GetOrientation()
+        {
+            return Ok(await _propertyService.GetOrientation());
+        }
+
+        [HttpGet("GetNewType")]
+        public async Task<IActionResult> GetNewType()
+        {
+            return Ok(await _propertyService.GetNewType());
+        }
+
         [HttpPost("Upload")]
         public IActionResult Upload()
         {

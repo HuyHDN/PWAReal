@@ -17,6 +17,7 @@ namespace WebPWA.Client.ViewModel
         public string LoginPassword { get; set; }
         [Required, Compare("LoginPassword", ErrorMessage = "Mật khẩu không giống nhau")]
         public string ConfirmPassword { get; set; }
+        [Required]
         public string FullName { get; set; }
         [StringLength(12, ErrorMessage = "Số điện thoại không hợp lệ (nhỏ hơn 12 số)")]
         public string Phone { get; set; }
@@ -54,6 +55,16 @@ namespace WebPWA.Client.ViewModel
             LoadCurrentObject(u);
         }
 
+        public async Task<User> GetUserByLoginName(string loginName)
+        {
+            ServiceResponse<User> userResponse = new ServiceResponse<User>();
+            User u = new User();
+            userResponse = await httpClient.GetFromJsonAsync<ServiceResponse<User>>("http://localhost:70/WebAPI/User/GetUserByLoginName/" + loginName);
+            if (userResponse != null)
+                u = userResponse.Data;
+            return u;
+        }
+
         public async Task UpdateUser(Guid id)
         {
             User user = this;
@@ -86,6 +97,15 @@ namespace WebPWA.Client.ViewModel
                     return u;
                 }
             }
+            return null;
+        }
+
+        public async Task<string> GetUserRole(Guid userID)
+        {
+            ServiceResponse<string> userResponse = new ServiceResponse<string>();
+            userResponse = await httpClient.GetFromJsonAsync<ServiceResponse<string>>("http://localhost:70/WebAPI/User/GetRoleByUser/" + userID.ToString());
+            if (userResponse != null)
+                return userResponse.Data;
             return null;
         }
 

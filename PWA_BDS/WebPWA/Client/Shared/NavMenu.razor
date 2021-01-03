@@ -1,4 +1,8 @@
-﻿<div class="top-row pl-4 navbar navbar-dark">
+﻿@inject NavigationManager NavigationManager
+@using WebPWA.Shared
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<div class="top-row pl-4 navbar navbar-dark">
     <a class="navbar-brand" href="">Real Este App</a>
     <button class="navbar-toggler" @onclick="ToggleNavMenu">
         <span class="navbar-toggler-icon"></span>
@@ -33,29 +37,32 @@
                     </NavLink>
                 </li>
                 <li class="nav-item submenu">
-                    <NavLink class="nav-link" href="manageeste">
+                    <NavLink class="nav-link" href="property/propertylist">
                         Quản lí tin đăng
                     </NavLink>
                 </li>
             </ul>
         </li>
-        <li class="nav-item px-3">
-            <NavLink class="nav-link">
-                <span class="oi oi-minus" aria-hidden="true"></span> Admin user
-            </NavLink>
-            <ul class="nav">
-                <li class="nav-item submenu">
-                    <NavLink class="nav-link" href="user/register">
-                        Thêm user
-                    </NavLink>
-                </li>
-                <li class="nav-item submenu">
-                    <NavLink class="nav-link" href="user/userlist">
-                        Quản lí user
-                    </NavLink>
-                </li>
-            </ul>
-        </li>
+        @if (isAdminLogin)
+        {
+            <li class="nav-item px-3">
+                <NavLink class="nav-link">
+                    <span class="oi oi-minus" aria-hidden="true"></span> Admin user
+                </NavLink>
+                <ul class="nav">
+                    <li class="nav-item submenu">
+                        <NavLink class="nav-link" href="user/register">
+                            Thêm user
+                        </NavLink>
+                    </li>
+                    <li class="nav-item submenu">
+                        <NavLink class="nav-link" href="user/userlist">
+                            Quản lí user
+                        </NavLink>
+                    </li>
+                </ul>
+            </li>
+        }
         @*<li class="nav-item px-3">
             <NavLink class="nav-link" href="user/login">
                 <span class="oi oi-plus" aria-hidden="true"></span> Đăng nhập
@@ -65,6 +72,19 @@
 </div>
 
 @code {
+    UserSession currentUser = new UserSession();
+    string key = "userInfo";
+    bool isAdminLogin = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUser = await localStorage.GetItemAsync<UserSession>(key);
+        if (currentUser != null && currentUser.RoleCode == "ADMIN")
+        {
+            isAdminLogin = true;
+        }
+    }
+
     private bool collapseNavMenu = true;
 
     private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;

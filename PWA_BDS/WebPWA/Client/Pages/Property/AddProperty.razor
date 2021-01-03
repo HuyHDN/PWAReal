@@ -1,8 +1,10 @@
 ﻿@page "/property/addproperty"
 @using Client.ViewModel
 @using WebPWA.Shared
+@using System.Net.Http.Headers;
 @inject NavigationManager NavigationManager
 @inject PropertyViewModel _propertyViewModel
+@inject UserViewModel _userViewModel
 @inject IJSRuntime JSRuntime
 @inject Blazored.LocalStorage.ILocalStorageService localStorage
 
@@ -12,8 +14,8 @@
     <EditForm Model="@_propertyViewModel" OnValidSubmit="HandleAddProperty">
         <DataAnnotationsValidator />
         <div class="form-group">
-            <label for="email">Title</label>
-            <InputText id="email" @bind-Value="_propertyViewModel.Title" class="form-control" />
+            <label>Tiêu đề</label>
+            <InputText @bind-Value="_propertyViewModel.Title" class="form-control" />
             <ValidationMessage For="@(() => _propertyViewModel.Title)" />
         </div>
         <label>Loại</label>
@@ -35,7 +37,7 @@
         </select>
         <br />
         <label>Quận / Huyện</label>
-        <select @bind="_propertyViewModel.LocationID">
+        <select @onchange="DistrictChange">
             <option value="0">Quận / Huyện</option>
             @foreach (var district in lstDistrict)
             {
@@ -44,7 +46,7 @@
         </select>
         <br />
         <label>Phường / Xã</label>
-        <select @bind="selectedWardID">
+        <select @bind="_propertyViewModel.LocationID">
             <option value="0">Phường / Xã</option>
             @foreach (var ward in lstWard)
             {
@@ -52,6 +54,11 @@
             }
         </select>
         <br />
+        <div class="form-group">
+            <label>Địa chỉ</label>
+            <InputText @bind-Value="_propertyViewModel.Address" class="form-control" />
+            <ValidationMessage For="@(() => _propertyViewModel.Address)" />
+        </div>
         <div class="form-group">
             <label>Chiều rộng</label>
             <input type="text" min="0" decimal="true" numbersonly="true" numberonly="2" max="9999" @bind-value="_propertyViewModel.Width" class="form-control" />
@@ -66,6 +73,23 @@
             <label>Diện tích</label>
             <InputNumber @bind-Value="_propertyViewModel.Area" class="form-control" /> m2
         </div>
+        <div class="form-group">
+            <label>Giá từ</label>
+            <InputNumber @bind-Value="_propertyViewModel.PriceFrom" class="form-control" /> m2
+        </div>
+        <div class="form-group">
+            <label>đến</label>
+            <InputNumber @bind-Value="_propertyViewModel.PriceTo" class="form-control" /> m2
+        </div>
+        <label>Hướng</label>
+        <select @bind="_propertyViewModel.OrientationID">
+            <option value="0">KXĐ</option>
+            @foreach (var ori in lstOrientation)
+            {
+                <option value="@ori.ID">@ori.Name</option>
+            }
+        </select>
+        <br />
         <div class="form-group">
             <label>Số kho</label>
             <InputNumber @bind-Value="_propertyViewModel.NoOfStorey" class="form-control" />
@@ -82,14 +106,27 @@
             <label>Mô tả chi tiết</label>
             <InputTextArea @bind-Value="_propertyViewModel.Content" class="form-control" />
         </div>
-        <input type="file" @ref="_input" @onchange="HandleSelected" accept=".jpg, .jpeg, png" /><br />
-        @if (ImgUrl != null)
-        {
-            <div>
-                <img src="@ImgUrl" style="width:300px" />
-            </div>
-            <br />
-        }
+        <input type="file" @ref="_input" @onchange="UploadChange" id="BrowseImage" style="display:none" accept=".jpg, .jpeg, .png" /><br />
+        <img id="UploadImage" src="@imgSrc" @onclick="UploadClickEvent" style="width:300px;cursor:pointer" />
+        <button type="button" class="btn-primary" @onclick="ClearImage">Xóa hình</button>
+        <br />
+        <label>Loại tin</label>
+        <select @bind="_propertyViewModel.AdsID">
+            <option value="0">Phân mục</option>
+            @foreach (var type in lstAds)
+            {
+                <option value="@type.ID">@type.Name</option>
+            }
+        </select>
+        <br />
+        <div class="form-group">
+            <label>Ngày đăng</label>
+            <InputDate @bind-Value="_propertyViewModel.ValidityDateFrom" style="width:200px" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label>Ngày hết hạn</label>
+            <InputDate @bind-Value="_propertyViewModel.ValidityDateTo" style="width:200px" class="form-control" />
+        </div>
         <button type="submit" class="btn btn-primary" style="margin-top:30px;margin-left:50px">Đăng tin</button>
     </EditForm>
 }
@@ -104,22 +141,27 @@ else
     List<Location> lstCity = new List<Location>();
     List<Location> lstDistrict = new List<Location>();
     List<Location> lstWard = new List<Location>();
-    Guid selectedCityID, selectedDistrictID, selectedWardID, selectedPropertyTypeID;
+    List<Code> lstOrientation = new List<Code>();
+    List<Code> lstAds = new List<Code>();
+    Guid selectedCityID, selectedDistrictID;
     IFileListEntry file;
     string key = "userInfo";
     string imgSrc;
     bool isLogin = false;
-    UserLogin currentUser = new UserLogin();
+    UserSession currentUser = new UserSession();
+    MemoryStream memoryStream;
+    string fileName;
 
     protected override async Task OnInitializedAsync()
     {
-        Task.Delay(2000);
-        currentUser = await localStorage.GetItemAsync<UserLogin>(key);
+        currentUser = await localStorage.GetItemAsync<UserSession>(key);
         if (currentUser != null)
         {
             isLogin = true;
+            lstAds = await _propertyViewModel.GetNewType();
             lstPropertyType = await _propertyViewModel.GetPropertyType();
             lstCity = await _propertyViewModel.GetCity();
+            lstOrientation = await _propertyViewModel.GetOrientation();
             imgSrc = "Content/images/no-image-available-icon-7.jpg";
         }
 
@@ -129,12 +171,36 @@ else
     {
         selectedCityID = Guid.Parse(e.Value.ToString());
         lstDistrict = await _propertyViewModel.GetDistrict(selectedCityID);
+        lstWard = new List<Location>();
+        _propertyViewModel.LocationID = Guid.Empty;
+    }
+
+    private async Task DistrictChange(ChangeEventArgs e)
+    {
+        selectedDistrictID = Guid.Parse(e.Value.ToString());
+        lstWard = await _propertyViewModel.GetWard(selectedDistrictID);
         _propertyViewModel.LocationID = Guid.Empty;
     }
 
     private async Task HandleAddProperty()
     {
-
+        foreach (var file in await FileReaderService.CreateReference(_input).EnumerateFilesAsync())
+        {
+            if (file != null)
+            {
+                var fileInfo = await file.ReadFileInfoAsync();
+                using (var ms = await file.CreateMemoryStreamAsync(4 * 1024))
+                {
+                    var content = new MultipartFormDataContent();
+                    content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+                    content.Add(new StreamContent(ms, Convert.ToInt32(ms.Length)), "image", fileInfo.Name);
+                    await _propertyViewModel.UploadProductImage(content);
+                    _propertyViewModel.Image = fileInfo.Name;
+                }
+            }
+        }
+        User u = await _userViewModel.GetUserByLoginName(currentUser.LoginName);
+        _propertyViewModel.CreatedUserID = u.ID;
         await _propertyViewModel.CreateProperty();
         NavigationManager.NavigateTo("/");
     }
@@ -144,15 +210,26 @@ else
         await JSRuntime.InvokeVoidAsync("UploadClickEvent");
     }
 
-    private async Task UploadChange(IFileListEntry[] files)
+    private async Task UploadChange()
     {
-        file = files.FirstOrDefault();
-        if (file != null)
+        foreach (var file in await FileReaderService.CreateReference(_input).EnumerateFilesAsync())
         {
-            var memoryStream = new MemoryStream();
-            await file.Data.CopyToAsync(memoryStream);
-            imgSrc = "data:image/png;base64," + Convert.ToBase64String(memoryStream.ToArray(), 0, memoryStream.ToArray().Length);
+            if (file != null)
+            {
+                var fileInfo = await file.ReadFileInfoAsync();
+                using (var ms = await file.CreateMemoryStreamAsync(4 * 1024))
+                {
+                    imgSrc = "data:image/png;base64," + Convert.ToBase64String(ms.ToArray(), 0, ms.ToArray().Length);
+                }
+            }
         }
+        //file = files.FirstOrDefault();
+        //if (file != null)
+        //{
+        //    memoryStream = new MemoryStream();
+        //    await file.Data.CopyToAsync(memoryStream);
+        //    imgSrc = "data:image/png;base64," + Convert.ToBase64String(memoryStream.ToArray(), 0, memoryStream.ToArray().Length);
+        //}
     }
 
     private void ClearImage()
