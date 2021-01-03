@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+// Get location
 namespace WebAPI_BDS.Model
 {
     public class Location
