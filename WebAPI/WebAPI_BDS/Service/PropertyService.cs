@@ -79,20 +79,32 @@ namespace WebAPI_BDS.Service
         public async Task<ServiceResponse<Property>> UpdateProperty(Guid propertyID, Property property)
         {
             Property propertyToUpdate = await _context.Property.Where(x => x.ID == propertyID).FirstOrDefaultAsync();
-            propertyToUpdate.Content = property.Content;
             propertyToUpdate.Title = property.Title;
+            propertyToUpdate.Content = property.Content;
             propertyToUpdate.Address = property.Address;
+            propertyToUpdate.AdsID = property.AdsID;
+            propertyToUpdate.Area = property.Area;
+            propertyToUpdate.CreatedUserID = property.CreatedUserID;
+            propertyToUpdate.Image = property.Image;
+            propertyToUpdate.LocationID = property.LocationID;
+            propertyToUpdate.Length = property.Length;
+            propertyToUpdate.Width = property.Width;
+            propertyToUpdate.NoOfRooms = property.NoOfRooms;
+            propertyToUpdate.NoOfStorey = property.NoOfStorey;
+            propertyToUpdate.NoOfToilets = property.NoOfToilets;
+            propertyToUpdate.PriceFrom = property.PriceFrom;
+            propertyToUpdate.PriceTo = property.PriceTo;
+            propertyToUpdate.PropertyTypeID = property.PropertyTypeID;
+            propertyToUpdate.Status = property.Status;
+            propertyToUpdate.ValidityDateFrom = property.ValidityDateFrom;
+            propertyToUpdate.ValidityDateTo = property.ValidityDateTo;
+            propertyToUpdate.OrientationID = property.OrientationID;
             await _context.SaveChangesAsync();
             ServiceResponse<Property> propertyResponse = new ServiceResponse<Property>
             {
                 Data = propertyToUpdate
             };
             return propertyResponse;
-        }
-
-        public Task<ServiceResponse<string>> UploadImage()
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<ServiceResponse<List<Property>>> GetPropertyByUserID(Guid userID)

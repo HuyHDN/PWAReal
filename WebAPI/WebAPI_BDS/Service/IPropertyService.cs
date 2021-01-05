@@ -17,6 +17,5 @@ namespace WebAPI_BDS.Service
         Task<ServiceResponse<List<Code>>> GetPropertyType();
         Task<ServiceResponse<List<Code>>> GetOrientation();
         Task<ServiceResponse<List<Code>>> GetNewType();
-        Task<ServiceResponse<string>> UploadImage();
     }
 }
