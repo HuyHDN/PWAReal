@@ -176,6 +176,16 @@ namespace WebPWA.Client.ViewModel
             return null;
         }
 
+        public async Task<List<Property>> GetPropertyByUserID(Guid id)
+        {
+            ServiceResponse<List<Property>> propertyResponse = new ServiceResponse<List<Property>>();
+            List<Property> properties = new List<Property>();
+            propertyResponse = await httpClient.GetFromJsonAsync<ServiceResponse<List<Property>>>("http://localhost:70/WebAPI/Property/GetPropertyByUserID/" + id.ToString());
+            if (propertyResponse != null)
+                return propertyResponse.Data;
+            return null;
+        }
+
         public static implicit operator PropertyViewModel(Property Property)
         {
             return new PropertyViewModel

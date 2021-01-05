@@ -94,5 +94,12 @@ namespace WebAPI_BDS.Service
         {
             throw new NotImplementedException();
         }
+
+        public async Task<ServiceResponse<List<Property>>> GetPropertyByUserID(Guid userID)
+        {
+            ServiceResponse<List<Property>> propertyResponse = new ServiceResponse<List<Property>>();
+            propertyResponse.Data = await _context.Property.Where(x => x.CreatedUserID == userID).ToListAsync();
+            return propertyResponse;
+        }
     }
 }

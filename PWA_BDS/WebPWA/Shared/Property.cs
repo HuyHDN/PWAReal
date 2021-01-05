@@ -7,6 +7,7 @@ namespace WebPWA.Shared
     {
         ĐÔNG, TÂY, NAM, BẮC, ĐÔNG_NAM, TÂY_NAM, ĐÔNG_BẮC, TÂY_BẮC
     }
+    
     public class Property
     {
         public Guid ID { get; set; }
@@ -40,5 +41,25 @@ namespace WebPWA.Shared
         public DateTime CreatedDateTime { get; set; }
         public DateTime LastModifiedDateTime { get; set; }
         public DateTime SuccessedDateTime { get; set; }
+
+        public static string StatusToString(int status)
+        {
+            switch (status)
+            {
+                case 0:
+                    return "Chờ duyệt";
+                case 1:
+                    return "Đã duyệt";
+                case 2:
+                    return "Hết hạn";
+                case 3:
+                    return "Đã bán";
+                case 4:
+                    return "Chính chủ";
+                case 5:
+                    return "Môi giới";
+            }
+            return string.Empty;
+        }
     }
 }

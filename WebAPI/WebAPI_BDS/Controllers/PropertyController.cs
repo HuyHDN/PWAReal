@@ -82,10 +82,11 @@ namespace WebAPI_BDS.Controllers
             return File(b, "image/jpeg");
         }
 
+        [Route("GetPropertyByUserID/{userID}")]
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> GetPropertyByUserID(Guid userID)
         {
-            return "value";
+            return Ok(await _propertyService.GetPropertyByUserID(userID));
         }
 
 

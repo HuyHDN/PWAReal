@@ -37,7 +37,7 @@
                     </NavLink>
                 </li>
                 <li class="nav-item submenu">
-                    <NavLink class="nav-link" href="property/propertylist">
+                    <NavLink class="nav-link" href="@propertyUrl">
                         Quản lí tin đăng
                     </NavLink>
                 </li>
@@ -64,10 +64,10 @@
             </li>
         }
         @*<li class="nav-item px-3">
-            <NavLink class="nav-link" href="user/login">
-                <span class="oi oi-plus" aria-hidden="true"></span> Đăng nhập
-            </NavLink>
-        </li>*@
+                <NavLink class="nav-link" href="user/login">
+                    <span class="oi oi-plus" aria-hidden="true"></span> Đăng nhập
+                </NavLink>
+            </li>*@
     </ul>
 </div>
 
@@ -75,13 +75,16 @@
     UserSession currentUser = new UserSession();
     string key = "userInfo";
     bool isAdminLogin = false;
+    string propertyUrl;
 
     protected override async Task OnInitializedAsync()
     {
         currentUser = await localStorage.GetItemAsync<UserSession>(key);
-        if (currentUser != null && currentUser.RoleCode == "ADMIN")
+        if (currentUser != null)
         {
-            isAdminLogin = true;
+            propertyUrl = "property/propertylist/" + currentUser.UserID.ToString();
+            if (currentUser.RoleCode == "ADMIN")
+                isAdminLogin = true;
         }
     }
 

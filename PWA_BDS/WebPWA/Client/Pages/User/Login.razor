@@ -39,6 +39,7 @@
         {
             userSession.LoginName = user.LoginName;
             userSession.RoleCode = await _userViewModel.GetUserRole(currentUser.ID);
+            userSession.UserID = currentUser.ID;
             SaveLocalStorage();
             NavigationManager.NavigateTo("/",true);
         }
