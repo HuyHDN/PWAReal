@@ -9,6 +9,7 @@ export default class Update extends Component {
       fullname: "",
       address: "",
       userrole: "",
+      status: "",
     };
 
     this.handleInputChange = this.handleInputChange.bind(this);
@@ -32,6 +33,7 @@ export default class Update extends Component {
     console.log("A fullname was submitted: " + this.state.fullname);
     console.log("A address was submitted: " + this.state.address);
     console.log("A userrole was submitted: " + this.state.userrole);
+    console.log("A status was submitted: " + this.state.status);
 
     event.preventDefault();
   }
@@ -43,7 +45,7 @@ export default class Update extends Component {
         <form onSubmit={this.handleSubmit}>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="inputEmail4">User Id</label>
+              <label for="userid">User Id</label>
               <input
                 type="text"
                 name="userid"
@@ -55,7 +57,7 @@ export default class Update extends Component {
               />{" "}
             </div>
             <div class="form-group col-md-6">
-              <label for="inputPassword4">Password</label>
+              <label for="password">Password</label>
               <input
                 type="password"
                 name="password"
@@ -68,7 +70,7 @@ export default class Update extends Component {
             </div>
           </div>
           <div class="form-group">
-            <label for="inputAddress">Full Name</label>
+            <label for="fullname">Full Name</label>
             <input
               type="text"
               name="fullname"
@@ -80,7 +82,7 @@ export default class Update extends Component {
             />
           </div>
           <div class="form-group">
-            <label for="inputAddress2">Address</label>
+            <label for="address">Address</label>
             <input
               type="text"
               name="address"
@@ -93,7 +95,7 @@ export default class Update extends Component {
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="inputCity">User Role</label>
+              <label for="userrole">User Role</label>
               <input
                 name="userrole"
                 type="text"
@@ -105,21 +107,17 @@ export default class Update extends Component {
               />
             </div>
             <div class="form-group col-md-6">
-              <label for="inputState">Active?</label>
-              <select id="inputState" class="form-control">
-                <option value="Yes" selected>
-                  Yes
-                </option>
+              <label for="status">Active?</label>
+              <select
+                name="status"
+                class="form-control"
+                value={this.state.status}
+                onChange={this.handleInputChange}
+                id="status"
+              >
+                <option value="Yes">Yes</option>
                 <option value="No">No</option>
               </select>
-            </div>
-          </div>
-          <div class="form-group">
-            <div class="form-check">
-              <input class="form-check-input" type="checkbox" id="gridCheck" />
-              <label class="form-check-label" for="gridCheck">
-                Check me out
-              </label>
             </div>
           </div>
           <button type="submit" class="btn btn-primary">
