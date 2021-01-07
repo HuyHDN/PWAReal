@@ -54,7 +54,7 @@ export default class Navbar extends Component {
                         </a>
                       </li>
                       <li className="nav-item">
-                        <a className="nav-link" href="blog-grid.html">
+                        <a className="nav-link" href="blog-grid">
                           Blog
                         </a>
                       </li>

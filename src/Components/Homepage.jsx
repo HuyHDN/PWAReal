@@ -9,7 +9,8 @@ import LatestProps from '../Component/LatestProps';
 import Agents from '../Component/Agents';
 import Testimonial from '../Component/Testimonials';
 import LatestNews from '../Component/LatestNews';
-import PropertyLists from '../Component/PropertyList'
+import PropertyLists from '../Component/PropertyList';
+import Update from '../Component/Update.js';
 import Footer from '../Component/FooterPage';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
@@ -43,6 +44,9 @@ export default class Homepage extends Component {
               </Route>
               <Route path="/property-grid">
                 <PropertyLists />
+              </Route>
+              <Route path="/blog-grid">
+                <Update />
               </Route>
             </Switch>
           </Router>
