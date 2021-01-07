@@ -3,7 +3,7 @@ import React, { Component } from "react";
 export default class Update extends Component {
   constructor(props) {
     super(props);
-    this.state = { value: '' };
+    this.state = { value: "" };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -30,7 +30,7 @@ export default class Update extends Component {
             <input
               type="text"
               name="userid"
-              value={this.state.userid}
+              value={this.state.value}
               onChange={this.handleChange}
               class="form-control"
               id="id"

@@ -4,11 +4,11 @@ export default class Update extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      userid: "",
+      userId: "",
       password: "",
-      fullname: "",
+      fullName: "",
       address: "",
-      userrole: "",
+      userRole: "",
       status: "",
     };
 
@@ -28,11 +28,11 @@ export default class Update extends Component {
   }
 
   handleSubmit(event) {
-    console.log("A userid was submitted: " + this.state.userid);
+    console.log("A userId was submitted: " + this.state.userId);
     console.log("A password was submitted: " + this.state.password);
-    console.log("A fullname was submitted: " + this.state.fullname);
+    console.log("A fullName was submitted: " + this.state.fullName);
     console.log("A address was submitted: " + this.state.address);
-    console.log("A userrole was submitted: " + this.state.userrole);
+    console.log("A userRole was submitted: " + this.state.userRole);
     console.log("A status was submitted: " + this.state.status);
 
     event.preventDefault();
@@ -40,20 +40,20 @@ export default class Update extends Component {
 
   render() {
     return (
-      <div className="container" style={{ paddingTop: "150px" }}>
+      <div className="container" style={{ paddingTop: "50px" }}>
         <h1> Update Users </h1>
         <form onSubmit={this.handleSubmit}>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="userid">User Id</label>
+              <label for="userId">User Id</label>
               <input
                 type="text"
-                name="userid"
-                value={this.state.userid}
+                name="userId"
+                value={this.state.userId}
                 onChange={this.handleInputChange}
                 class="form-control"
-                id="id"
-                placeholder="userid"
+                id="userId"
+                placeholder="userId"
               />{" "}
             </div>
             <div class="form-group col-md-6">
@@ -70,14 +70,14 @@ export default class Update extends Component {
             </div>
           </div>
           <div class="form-group">
-            <label for="fullname">Full Name</label>
+            <label for="fullName">Full Name</label>
             <input
               type="text"
-              name="fullname"
+              name="fullName"
               class="form-control"
-              value={this.state.fullname}
+              value={this.state.fullName}
               onChange={this.handleInputChange}
-              id="fullname"
+              id="fullName"
               placeholder="Full Name"
             />
           </div>
@@ -89,20 +89,20 @@ export default class Update extends Component {
               class="form-control"
               value={this.state.address}
               onChange={this.handleInputChange}
-              id="inputAddress2"
+              id="address"
               placeholder="Address"
             />
           </div>
           <div class="form-row">
             <div class="form-group col-md-6">
-              <label for="userrole">User Role</label>
+              <label for="userRole">User Role</label>
               <input
-                name="userrole"
+                name="userRole"
                 type="text"
-                value={this.state.userrole}
+                value={this.state.userRole}
                 onChange={this.handleInputChange}
                 class="form-control"
-                id="User Role"
+                id="userRole"
                 placeholder="User Role"
               />
             </div>
