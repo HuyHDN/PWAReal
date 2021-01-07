@@ -4,21 +4,35 @@ export default class Update extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        userid : "",
-        password : "",
-        fullname : "",
-        address : ""
+      userid: "",
+      password: "",
+      fullname: "",
+      address: "",
+      userrole: "",
     };
 
-    this.handleChange = this.handleChange.bind(this);
+    this.handleInputChange = this.handleInputChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
   }
 
-  handleChange(event) {
-    this.setState({ value: event.target.value });
+  handleInputChange(event) {
+    const target = event.target;
+    const value = target.value;
+    const name = target.name;
+
+    this.setState({
+      [name]: value,
+    });
   }
 
   handleSubmit(event) {
+    console.log("A userid was submitted: " + this.state.userid);
+    console.log("A password was submitted: " + this.state.password);
+    console.log("A fullname was submitted: " + this.state.fullname);
+    console.log("A address was submitted: " + this.state.address);
+    console.log("A userrole was submitted: " + this.state.userrole);
+
     event.preventDefault();
   }
 
@@ -34,7 +48,7 @@ export default class Update extends Component {
                 type="text"
                 name="userid"
                 value={this.state.userid}
-                onChange={this.handleChange}
+                onChange={this.handleInputChange}
                 class="form-control"
                 id="id"
                 placeholder="userid"
@@ -47,7 +61,7 @@ export default class Update extends Component {
                 name="password"
                 class="form-control"
                 value={this.state.password}
-                onChange={this.handleChange}
+                onChange={this.handleInputChange}
                 id="password"
                 placeholder="Password"
               />
@@ -60,7 +74,7 @@ export default class Update extends Component {
               name="fullname"
               class="form-control"
               value={this.state.fullname}
-              onChange={this.handleChange}
+              onChange={this.handleInputChange}
               id="fullname"
               placeholder="Full Name"
             />
@@ -72,7 +86,7 @@ export default class Update extends Component {
               name="address"
               class="form-control"
               value={this.state.address}
-              onChange={this.handleChange}
+              onChange={this.handleInputChange}
               id="inputAddress2"
               placeholder="Address"
             />
@@ -81,7 +95,10 @@ export default class Update extends Component {
             <div class="form-group col-md-6">
               <label for="inputCity">User Role</label>
               <input
+                name="userrole"
                 type="text"
+                value={this.state.userrole}
+                onChange={this.handleInputChange}
                 class="form-control"
                 id="User Role"
                 placeholder="User Role"
