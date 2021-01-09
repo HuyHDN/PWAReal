@@ -1,38 +1,28 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 export default class PropertyList extends Component {
   constructor(props) {
     super(props);
-    this.handleClick = this.handleClick.bind(this);
+    this.state = {
+      data: [],
+    };
   }
-  
+  componentDidMount() {
+    fetch("http://realesteapi.somee.com/Property/GetAllProperty")
+      .then((res) => res.json())
+      .then((result) => {
+        this.setState({
+          data: result.data,
+        });
+      });
+  }
   render() {
+    let { data } = this.state;
+
     return (
       <div>
         <div>
-          <meta charSet="utf-8" />
-          <meta
-            content="width=device-width, initial-scale=1.0"
-            name="viewport"
-          />
-          <title>EstateAgency Bootstrap Template - Index</title>
-          <meta content name="descriptison" />
-          <meta content name="keywords" />
-          {/* Favicons */}
-          <link href="assets/img/favicon.png" rel="icon" />
-          <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
-          {/* Google Fonts */}
-          <link
-            href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700"
-            rel="stylesheet"
-          />
-          
-          {/* =======================================================
-  * Template Name: EstateAgency - v2.1.0
-  * Template URL: https://bootstrapmade.com/real-estate-agency-bootstrap-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== */}
           {/* ======= Property Search Section ======= */}
           <div className="click-closed" />
           {/*/ Form Search Star /*/}
@@ -220,16 +210,16 @@ export default class PropertyList extends Component {
                       className="dropdown-menu"
                       aria-labelledby="navbarDropdown"
                     >
-                      <a className="dropdown-item" href="property-single.html">
+                      <a className="dropdown-item" href="property-single">
                         Property Single
                       </a>
-                      <a className="dropdown-item" href="blog-single.html">
+                      <a className="dropdown-item" href="blog-single">
                         Blog Single
                       </a>
-                      <a className="dropdown-item" href="agents-grid.html">
+                      <a className="dropdown-item" href="agents-grid">
                         Agents Grid
                       </a>
-                      <a className="dropdown-item" href="agent-single.html">
+                      <a className="dropdown-item" href="agent-single">
                         Agent Single
                       </a>
                     </div>
@@ -302,336 +292,69 @@ export default class PropertyList extends Component {
                       </form>
                     </div>
                   </div>
-                  <div className="col-md-4">
-                    <div className="card-box-a card-shadow">
-                      <div className="img-box-a">
-                        <img
-                          src={require("../public/assets/img/property-1.jpg")}
-                          alt=""
-                          className="img-a img-fluid"
-                        />
-                      </div>
-                      <div className="card-overlay">
-                        <div className="card-overlay-a-content">
-                          <div className="card-header-a">
-                            <h2 className="card-title-a">
-                              <a href="#">
-                                204 Mount
-                                <br /> Olive Road Two
-                              </a>
-                            </h2>
-                          </div>
-                          <div className="card-body-a">
-                            <div className="price-box d-flex">
-                              <span className="price-a">rent | $ 12.000</span>
+
+                  {/* Property List Space Here */}
+                  {data.map((item) => (
+                    <div className="col-md-4" key={item.id}>
+                      <div className="card-box-a card-shadow">
+                        <div className="img-box-a">
+                          <img
+                            src="assets/img/property-1.jpg"
+                            alt=""
+                            className="img-a img-fluid"
+                          />
+                        </div>
+                        <div className="card-overlay">
+                          <div className="card-overlay-a-content">
+                            <div className="card-header-a">
+                              <h2 className="card-title-a">
+                                <a href="#">
+                                  204 Mount
+                                  <br /> {item.title}
+                                </a>
+                              </h2>
                             </div>
-                            <a href="property-single.html" className="link-a">
-                              Click here to view
-                              <span className="ion-ios-arrow-forward" />
-                            </a>
-                          </div>
-                          <div className="card-footer-a">
-                            <ul className="card-info d-flex justify-content-around">
-                              <li>
-                                <h4 className="card-info-title">Area</h4>
-                                <span>
-                                  340m
-                                  <sup>2</sup>
+                            <div className="card-body-a">
+                              <div className="price-box d-flex">
+                                <span className="price-a">
+                                  rent | {item.priceFrom}
                                 </span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Beds</h4>
-                                <span>2</span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Baths</h4>
-                                <span>4</span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Garages</h4>
-                                <span>1</span>
-                              </li>
-                            </ul>
+                              </div>
+                              <Link to={`/details/${item.id}`}><a href="property-single" className="link-a">
+                                Click here to view
+                                <span className="ion-ios-arrow-forward" />
+                              </a></Link>
+                            </div>
+                            <div className="card-footer-a">
+                              <ul className="card-info d-flex justify-content-around">
+                                <li>
+                                  <h4 className="card-info-title">Area</h4>
+                                  <span>
+                                    {item.width * item.length}
+                                    <sup>2</sup>
+                                  </span>
+                                </li>
+                                <li>
+                                  <h4 className="card-info-title">Beds</h4>
+                                  <span>{item.noOfRooms}</span>
+                                </li>
+                                <li>
+                                  <h4 className="card-info-title">Baths</h4>
+                                  <span>{item.noOfToilets}</span>
+                                </li>
+                                <li>
+                                  <h4 className="card-info-title">Garages</h4>
+                                  <span>1</span>
+                                </li>
+                              </ul>
+                            </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="card-box-a card-shadow">
-                      <div className="img-box-a">
-                        <img
-                          src={require("../public/assets/img/property-3.jpg")}
-                          alt=""
-                          className="img-a img-fluid"
-                        />
-                      </div>
-                      <div className="card-overlay">
-                        <div className="card-overlay-a-content">
-                          <div className="card-header-a">
-                            <h2 className="card-title-a">
-                              <a href="#">
-                                204 Mount
-                                <br /> Olive Road Two
-                              </a>
-                            </h2>
-                          </div>
-                          <div className="card-body-a">
-                            <div className="price-box d-flex">
-                              <span className="price-a">rent | $ 12.000</span>
-                            </div>
-                            <a href="property-single.html" className="link-a">
-                              Click here to view
-                              <span className="ion-ios-arrow-forward" />
-                            </a>
-                          </div>
-                          <div className="card-footer-a">
-                            <ul className="card-info d-flex justify-content-around">
-                              <li>
-                                <h4 className="card-info-title">Area</h4>
-                                <span>
-                                  340m
-                                  <sup>2</sup>
-                                </span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Beds</h4>
-                                <span>2</span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Baths</h4>
-                                <span>4</span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Garages</h4>
-                                <span>1</span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="card-box-a card-shadow">
-                      <div className="img-box-a">
-                        <img
-                          src={require("../public/assets/img/property-6.jpg")}
-                          alt=""
-                          className="img-a img-fluid"
-                        />
-                      </div>
-                      <div className="card-overlay">
-                        <div className="card-overlay-a-content">
-                          <div className="card-header-a">
-                            <h2 className="card-title-a">
-                              <a href="#">
-                                204 Mount
-                                <br /> Olive Road Two
-                              </a>
-                            </h2>
-                          </div>
-                          <div className="card-body-a">
-                            <div className="price-box d-flex">
-                              <span className="price-a">rent | $ 12.000</span>
-                            </div>
-                            <a href="property-single.html" className="link-a">
-                              Click here to view
-                              <span className="ion-ios-arrow-forward" />
-                            </a>
-                          </div>
-                          <div className="card-footer-a">
-                            <ul className="card-info d-flex justify-content-around">
-                              <li>
-                                <h4 className="card-info-title">Area</h4>
-                                <span>
-                                  340m
-                                  <sup>2</sup>
-                                </span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Beds</h4>
-                                <span>2</span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Baths</h4>
-                                <span>4</span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Garages</h4>
-                                <span>1</span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="card-box-a card-shadow">
-                      <div className="img-box-a">
-                        <img
-                          src={require("../public/assets/img/property-7.jpg")}
-                          alt=""
-                          className="img-a img-fluid"
-                        />
-                      </div>
-                      <div className="card-overlay">
-                        <div className="card-overlay-a-content">
-                          <div className="card-header-a">
-                            <h2 className="card-title-a">
-                              <a href="#">
-                                204 Mount
-                                <br /> Olive Road Two
-                              </a>
-                            </h2>
-                          </div>
-                          <div className="card-body-a">
-                            <div className="price-box d-flex">
-                              <span className="price-a">rent | $ 12.000</span>
-                            </div>
-                            <a href="property-single.html" className="link-a">
-                              Click here to view
-                              <span className="ion-ios-arrow-forward" />
-                            </a>
-                          </div>
-                          <div className="card-footer-a">
-                            <ul className="card-info d-flex justify-content-around">
-                              <li>
-                                <h4 className="card-info-title">Area</h4>
-                                <span>
-                                  340m
-                                  <sup>2</sup>
-                                </span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Beds</h4>
-                                <span>2</span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Baths</h4>
-                                <span>4</span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Garages</h4>
-                                <span>1</span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="card-box-a card-shadow">
-                      <div className="img-box-a">
-                        <img
-                          src={require("../public/assets/img/property-8.jpg")}
-                          alt=""
-                          className="img-a img-fluid"
-                        />
-                      </div>
-                      <div className="card-overlay">
-                        <div className="card-overlay-a-content">
-                          <div className="card-header-a">
-                            <h2 className="card-title-a">
-                              <a href="#">
-                                204 Mount
-                                <br /> Olive Road Two
-                              </a>
-                            </h2>
-                          </div>
-                          <div className="card-body-a">
-                            <div className="price-box d-flex">
-                              <span className="price-a">rent | $ 12.000</span>
-                            </div>
-                            <a href="property-single.html" className="link-a">
-                              Click here to view
-                              <span className="ion-ios-arrow-forward" />
-                            </a>
-                          </div>
-                          <div className="card-footer-a">
-                            <ul className="card-info d-flex justify-content-around">
-                              <li>
-                                <h4 className="card-info-title">Area</h4>
-                                <span>
-                                  340m
-                                  <sup>2</sup>
-                                </span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Beds</h4>
-                                <span>2</span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Baths</h4>
-                                <span>4</span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Garages</h4>
-                                <span>1</span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="col-md-4">
-                    <div className="card-box-a card-shadow">
-                      <div className="img-box-a">
-                        <img
-                          src={require("../public/assets/img/property-10.jpg")}
-                          alt=""
-                          className="img-a img-fluid"
-                        />
-                      </div>
-                      <div className="card-overlay">
-                        <div className="card-overlay-a-content">
-                          <div className="card-header-a">
-                            <h2 className="card-title-a">
-                              <a href="#">
-                                204 Mount
-                                <br /> Olive Road Two
-                              </a>
-                            </h2>
-                          </div>
-                          <div className="card-body-a">
-                            <div className="price-box d-flex">
-                              <span className="price-a">rent | $ 12.000</span>
-                            </div>
-                            <a href="property-single.html" className="link-a">
-                              Click here to view
-                              <span className="ion-ios-arrow-forward" />
-                            </a>
-                          </div>
-                          <div className="card-footer-a">
-                            <ul className="card-info d-flex justify-content-around">
-                              <li>
-                                <h4 className="card-info-title">Area</h4>
-                                <span>
-                                  340m
-                                  <sup>2</sup>
-                                </span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Beds</h4>
-                                <span>2</span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Baths</h4>
-                                <span>4</span>
-                              </li>
-                              <li>
-                                <h4 className="card-info-title">Garages</h4>
-                                <span>1</span>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  ))}
+
+                  {/* Property List Space Ends */}
                 </div>
                 <div className="row">
                   <div className="col-sm-12">
@@ -839,11 +562,11 @@ export default class PropertyList extends Component {
                   </div>
                   <div className="credits">
                     {/*
-            All the links in the footer should remain intact.
-            You can delete the links only if you purchased the pro version.
-            Licensing information: https://bootstrapmade.com/license/
-            Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=EstateAgency
-          */}
+      All the links in the footer should remain intact.
+      You can delete the links only if you purchased the pro version.
+      Licensing information: https://bootstrapmade.com/license/
+      Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/buy/?theme=EstateAgency
+    */}
                     Designed by{" "}
                     <a href="https://bootstrapmade.com/">BootstrapMade</a>
                   </div>
@@ -852,12 +575,6 @@ export default class PropertyList extends Component {
             </div>
           </footer>
           {/* End  Footer */}
-          <a href="#" className="back-to-top">
-            <i className="fa fa-chevron-up" />
-          </a>
-          <div id="preloader" />
-          {/* Vendor JS Files */}
-          {/* Template Main JS File */}
         </div>
       </div>
     );

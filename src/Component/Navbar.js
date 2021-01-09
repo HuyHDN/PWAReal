@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 export default class Navbar extends Component {
     render() {
@@ -39,9 +38,9 @@ export default class Navbar extends Component {
                     id="navbarDefault"
                   >
                     <ul className="navbar-nav">
-                      <li className="nav-item"><Link to={"/"}>
+                      <li className="nav-item">
                         <a className="nav-link active" href="/">Home
-                        </a></Link>
+                        </a>
                       </li>
 
                       <li className="nav-item">
@@ -49,15 +48,15 @@ export default class Navbar extends Component {
                           About
                         </a>
                       </li>
-                      <li className="nav-item"><Link to={"/List"}>
+                      <li className="nav-item">
                         <a className="nav-link" href="property-grid">
                           Property
-                        </a></Link>
+                        </a>
                       </li>
-                      <li className="nav-item"><Link to={"/Details"}>
-                        <a className="nav-link" href="blog-grid.html">
+                      <li className="nav-item">
+                        <a className="nav-link" href="blog-grid">
                           Blog
-                        </a></Link>
+                        </a>
                       </li>
                       <li className="nav-item dropdown">
                         <a
@@ -77,17 +76,17 @@ export default class Navbar extends Component {
                         >
                           <a
                             className="dropdown-item"
-                            href="property-single.html"
+                            href="property-single"
                           >
                             Property Single
                           </a>
-                          <a className="dropdown-item" href="blog-single.html">
+                          <a className="dropdown-item" href="blog-single">
                             Blog Single
                           </a>
-                          <a className="dropdown-item" href="agents-grid.html">
+                          <a className="dropdown-item" href="agents-grid">
                             Agents Grid
                           </a>
-                          <a className="dropdown-item" href="agent-single.html">
+                          <a className="dropdown-item" href="agent-single">
                             Agent Single
                           </a>
                         </div>

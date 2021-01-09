@@ -1,7 +1,36 @@
 import React, { Component } from 'react'
+import { useParams } from 'react-router-dom';
 
 export default class PropertyDetails extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      retrievevalue: {},
+    };
+  }
+  componentDidMount(){
+    this.fetchDetails();
+  }
+  fetchDetails(){
+    const url = `http://realesteapi.somee.com/Property/GetPropertyByID/${this.props.match.params.id}`
+    const url1 = `http://realesteapi.somee.com/Property/GetPropertyByID/ac1fa806-8083-455f-9cb0-c06f5eb4e074`
+    fetch(url)
+    .then((res) => res.json())
+    .then((result) => {
+      console.log(result.data);
+      console.log(typeof result.data);
+      let result1 = result.data;
+      console.log(result1);
+      this.setState({
+        retrievevalue: result1,
+      });
+    });
+    console.log(this.props.match.params.id);
+    
+  }
     render() {
+      console.log(this.state.retrievevalue);
+      console.log(this.state.retrievevalue.title);
         return (
             <div>
                 <div>
@@ -14,15 +43,15 @@ export default class PropertyDetails extends Component {
         <link href="assets/img/favicon.png" rel="icon" />
         <link href="assets/img/apple-touch-icon.png" rel="apple-touch-icon" />
         {/* Google Fonts */}
-        <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet" />
+        {/* <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" rel="stylesheet" /> */}
         {/* Vendor CSS Files */}
         
         {/* Template Main CSS File */}
         {/* =======================================================
-  * Template Name: EstateAgency - v2.1.0
-  * Template URL: https://bootstrapmade.com/real-estate-agency-bootstrap-template/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
+      * Template Name: EstateAgency - v2.1.0
+      * Template URL: https://bootstrapmade.com/real-estate-agency-bootstrap-template/
+      * Author: BootstrapMade.com
+      * License: https://bootstrapmade.com/license/
   ======================================================== */}
         {/* ======= Property Search Section ======= */}
         <div className="click-closed" />
@@ -126,8 +155,8 @@ export default class PropertyDetails extends Component {
               <div className="row">
                 <div className="col-md-12 col-lg-8">
                   <div className="title-single-box">
-                    <h1 className="title-single">304 Blaster Up</h1>
-                    <span className="color-text-a">Chicago, IL 606543</span>
+                    <h1 className="title-single">{this.state.retrievevalue.title}</h1>
+                    <span className="color-text-a">{this.state.retrievevalue.address}</span>
                   </div>
                 </div>
                 <div className="col-md-12 col-lg-4">
@@ -140,7 +169,7 @@ export default class PropertyDetails extends Component {
                         <a href="property-grid.html">Properties</a>
                       </li>
                       <li className="breadcrumb-item active" aria-current="page">
-                        304 Blaster Up
+                      {this.state.retrievevalue.address}
                       </li>
                     </ol>
                   </nav>
@@ -153,7 +182,7 @@ export default class PropertyDetails extends Component {
             <div className="container">
               <div className="row">
                 <div className="col-sm-12">
-                  <div id="property-single-carousel" className="owl-carousel owl-arrow gallery-property">
+                  <div id="property-single-carousel" >
                     <div className="carousel-item-b">
                       <img src={require("../public/assets/img/slide-2.jpg")} alt="" />
                     </div>
@@ -169,10 +198,10 @@ export default class PropertyDetails extends Component {
                       <div className="property-price d-flex justify-content-center foo">
                         <div className="card-header-c d-flex">
                           <div className="card-box-ico">
-                            <span className="ion-money">$</span>
+                            <span className="ion-money">VND</span>
                           </div>
                           <div className="card-title-c align-self-center">
-                            <h5 className="title-c">15000</h5>
+                            <h5 className="title-c">{this.state.retrievevalue.priceFrom}</h5>
                           </div>
                         </div>
                       </div>
@@ -188,37 +217,37 @@ export default class PropertyDetails extends Component {
                           <ul className="list">
                             <li className="d-flex justify-content-between">
                               <strong>Property ID:</strong>
-                              <span>1134</span>
+                              <span>{this.state.retrievevalue.id}</span>
                             </li>
                             <li className="d-flex justify-content-between">
                               <strong>Location:</strong>
-                              <span>Chicago, IL 606543</span>
+                              <span>{this.state.retrievevalue.address}</span>
                             </li>
                             <li className="d-flex justify-content-between">
                               <strong>Property Type:</strong>
-                              <span>House</span>
+                              <span>{this.state.retrievevalue.content}</span>
                             </li>
                             <li className="d-flex justify-content-between">
                               <strong>Status:</strong>
-                              <span>Sale</span>
+                              <span>{this.state.retrievevalue.status}</span>
                             </li>
                             <li className="d-flex justify-content-between">
                               <strong>Area:</strong>
-                              <span>340m
+                              <span>{this.state.retrievevalue.area}m
                                 <sup>2</sup>
                               </span>
                             </li>
                             <li className="d-flex justify-content-between">
                               <strong>Beds:</strong>
-                              <span>4</span>
+                              <span>{this.state.retrievevalue.noOfRooms}</span>
                             </li>
                             <li className="d-flex justify-content-between">
                               <strong>Baths:</strong>
-                              <span>2</span>
+                              <span>{this.state.retrievevalue.noOfToilets}</span>
                             </li>
                             <li className="d-flex justify-content-between">
                               <strong>Garage:</strong>
-                              <span>1</span>
+                              <span>{this.state.retrievevalue.noOfRooms}</span>
                             </li>
                           </ul>
                         </div>
@@ -234,16 +263,10 @@ export default class PropertyDetails extends Component {
                       </div>
                       <div className="property-description">
                         <p className="description color-text-a">
-                          Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec velit
-                          neque, auctor sit amet
-                          aliquam vel, ullamcorper sit amet ligula. Cras ultricies ligula sed magna dictum porta.
-                          Curabitur aliquet quam id dui posuere blandit. Mauris blandit aliquet elit, eget tincidunt
-                          nibh pulvinar quam id dui posuere blandit.
+                        {this.state.retrievevalue.content}
                         </p>
                         <p className="description color-text-a no-margin">
-                          Curabitur arcu erat, accumsan id imperdiet et, porttitor at sem. Donec rutrum congue leo eget
-                          malesuada. Quisque velit nisi,
-                          pretium ut lacinia in, elementum id enim. Donec sollicitudin molestie malesuada.
+                        {this.state.retrievevalue.content}
                         </p>
                       </div>
                       <div className="row section-t3">
@@ -396,7 +419,7 @@ export default class PropertyDetails extends Component {
         </main>{/* End #main */}
 
         <a href="#" className="back-to-top"><i className="fa fa-chevron-up" /></a>
-        <div id="preloader" />
+
         {/* Vendor JS Files */}
         {/* Template Main JS File */}
       </div>
