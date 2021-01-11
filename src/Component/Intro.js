@@ -6,7 +6,7 @@ export default class Intro extends Component {
           <div>
             {/* ======= Intro Section ======= */}
             <div className="intro intro-carousel">
-              <div id="carousel" className="owl-carousel owl-theme">
+              <div id="carousel" className="carousel">
                 <div
                   className="carousel-item-a intro-item bg-image"
                   style={{ backgroundImage: `url('assets/img/slide-1.jpg')` }}
@@ -40,7 +40,7 @@ export default class Intro extends Component {
                     </div>
                   </div>
                 </div>
-                <div
+                {/* <div
                   className="carousel-item-a intro-item bg-image"
                   style={{ backgroundImage: `url('assets/img/slide-2.jpg')` }}
                 >
@@ -72,8 +72,8 @@ export default class Intro extends Component {
                       </div>
                     </div>
                   </div>
-                </div>
-                <div
+                </div> */}
+                {/* <div
                   className="carousel-item-a intro-item bg-image"
                   style={{ backgroundImage: `url('../public/assets/img/slide-3.jpg')` }}
                 >
@@ -105,7 +105,7 @@ export default class Intro extends Component {
                       </div>
                     </div>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
             {/* End Intro Section */}
