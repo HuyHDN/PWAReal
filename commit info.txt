@@ -1,18 +1,30 @@
 Web api: 
 	- User:
-		+ Get All User
-		+ Get User By ID
-		+ Create New User
-		+ Delete User
-		+ Login User
+		+ Get All User - http://realesteapi.somee.com/User/GetAllUser
+		+ Get User By ID - http://realesteapi.somee.com/User/GetUserByID/{id}
+		+ Get User By LoginName - http://realesteapi.somee.com/User/GetUserByLoginName/{loginname}
+		+ Create New User - http://realesteapi.somee.com/User/CreateUser (Body: User)
+		+ Update User - http://realesteapi.somee.com/User/UpdateUser/{id} (Body: User)
+		+ Delete User - http://realesteapi.somee.com/User/DeleteUser/{id}
+		+ Login User - http://realesteapi.somee.com/User/LoginUser (Body: User)
+		+ Get Role By User ID - http://realesteapi.somee.com/User/GetRoleByUser/{id}
 	- Location:
-		+ Get City
-		+ Get District
+		+ Get City - http://realesteapi.somee.com/Location/GetCity
+		+ Get District - http://realesteapi.somee.com/Location/GetDistrict/{cityid}
+		+ Get Ward - http://realesteapi.somee.com/Location/GetWard/{wardid}
+		+ Get Location By ID - http://realesteapi.somee.com/Location/GetLocationByID/{id}
 	- Property:
-		+ Get All Property
-		+ Get Property By ID
-		+ Create New Property
-		+ Delete Property
+		+ Get Property Type - http://realesteapi.somee.com/Property/GetPropertyType
+		+ Get Orientation - http://realesteapi.somee.com/Property/GetOrientation
+		+ Get News Type - http://realesteapi.somee.com/Property/GetNewType
+		+ Upload Image - http://realesteapi.somee.com/Property/Upload (Body: MultipartFormDataContent)
+		+ Get Image - http://realesteapi.somee.com/Property/GetImage/{imagename}
+		+ Get Property By User ID - http://realesteapi.somee.com/Property/GetPropertyByUserID/{userid}
+		+ Get All Property - http://realesteapi.somee.com/Property/GetAllProperty
+		+ Get Property By ID - http://realesteapi.somee.com/Property/GetPropertyByID/{id}
+		+ Create New Property - http://realesteapi.somee.com/Property/CreateProperty (Body: Property)
+		+ Delete Property - http://realesteapi.somee.com/Property/DeleteProperty/{id}
+		+ Update Property - http://realesteapi.somee.com/Property/UpdateProperty/{id} (Body: Property)
 Web app:
 	- Home Page:
 		+ UI Search
@@ -26,3 +38,4 @@ Web app:
 	- Property:
 		+ UI Property Detail
 		+ Create New Property
+		+ List Property
