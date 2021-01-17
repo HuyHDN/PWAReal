@@ -14,6 +14,8 @@ namespace WebAPI_BDS.Model
         public Guid ID { get; set; }
         public string Title { get; set; }
         public string Image { get; set; }
+        public string Image2 { get; set; }
+        public string Image3 { get; set; }
         public string Content { get; set; }
         public DateTime ValidityDateFrom { get; set; }
         public DateTime ValidityDateTo { get; set; }
@@ -42,6 +44,7 @@ namespace WebAPI_BDS.Model
         public DateTime CreatedDateTime { get; set; }
         public DateTime LastModifiedDateTime { get; set; }
         public DateTime SuccessedDateTime { get; set; }
-        
+        public int ViewCount { get; set; }
+
     }
 }

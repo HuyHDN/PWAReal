@@ -5,8 +5,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
-using WebPWA.Shared;
-namespace WebPWA.Client.ViewModel
+using WebRealEste.Shared;
+namespace WebRealEste.Client.ViewModel
 {
     public class UserViewModel
     {
@@ -39,27 +39,28 @@ namespace WebPWA.Client.ViewModel
         public async Task<List<User>> GetAllUser()
         {
             ServiceResponse<List<User>> userResponse = new ServiceResponse<List<User>>();
-            userResponse = await httpClient.GetFromJsonAsync<ServiceResponse<List<User>>>("http://localhost:70/WebAPI/User/GetAllUser");
+            userResponse = await httpClient.GetFromJsonAsync<ServiceResponse<List<User>>>(Config.Config.ApiUrl + "/User/GetAllUser");
             if (userResponse != null)
                 return userResponse.Data;
             return null;
         }
 
-        public async Task GetUserByID(Guid id)
+        public async Task<User> GetUserByID(Guid id)
         {
             ServiceResponse<User> userResponse = new ServiceResponse<User>();
             User u = new User();
-            userResponse = await httpClient.GetFromJsonAsync<ServiceResponse<User>>("http://localhost:70/WebAPI/User/GetUserByID/" + id.ToString());
+            userResponse = await httpClient.GetFromJsonAsync<ServiceResponse<User>>(Config.Config.ApiUrl + "/User/GetUserByID/" + id.ToString());
             if (userResponse != null)
                 u = userResponse.Data;
             LoadCurrentObject(u);
+            return u;
         }
 
         public async Task<User> GetUserByLoginName(string loginName)
         {
             ServiceResponse<User> userResponse = new ServiceResponse<User>();
             User u = new User();
-            userResponse = await httpClient.GetFromJsonAsync<ServiceResponse<User>>("http://localhost:70/WebAPI/User/GetUserByLoginName/" + loginName);
+            userResponse = await httpClient.GetFromJsonAsync<ServiceResponse<User>>(Config.Config.ApiUrl + "/User/GetUserByLoginName/" + loginName);
             if (userResponse != null)
                 u = userResponse.Data;
             return u;
@@ -68,29 +69,29 @@ namespace WebPWA.Client.ViewModel
         public async Task UpdateUser(Guid id)
         {
             User user = this;
-            await httpClient.PutAsJsonAsync("http://localhost:70/WebAPI/User/UpdateUser/" + id.ToString(), user);
+            await httpClient.PutAsJsonAsync(Config.Config.ApiUrl + "/User/UpdateUser/" + id.ToString(), user);
         }
 
         public async Task DeleteUser(Guid id)
         {
-            await httpClient.DeleteAsync("http://localhost:70/WebAPI/User/DeleteUser/" + id.ToString());
+            await httpClient.DeleteAsync(Config.Config.ApiUrl + "/User/DeleteUser/" + id.ToString());
         }
 
         public async Task CreateUser()
         {
             User user = this;
-            await httpClient.PostAsJsonAsync("http://localhost:70/WebAPI/User/CreateUser/", user);
+            await httpClient.PostAsJsonAsync(Config.Config.ApiUrl + "/User/CreateUser/", user);
         }
 
         public async Task<User> LoginUser()
         {
             User user = this;
-            HttpResponseMessage response = await httpClient.PostAsJsonAsync("http://localhost:70/WebAPI/User/LoginUser/", user);
+            HttpResponseMessage response = await httpClient.PostAsJsonAsync(Config.Config.ApiUrl + "/User/LoginUser/", user);
             if (response.IsSuccessStatusCode)
             {
                 ServiceResponse<User> userResponse = new ServiceResponse<User>();
                 User u = new User();
-                userResponse = await httpClient.GetFromJsonAsync<ServiceResponse<User>>("http://localhost:70/WebAPI/User/GetUserByLoginName/" + user.LoginName);
+                userResponse = await httpClient.GetFromJsonAsync<ServiceResponse<User>>(Config.Config.ApiUrl + "/User/GetUserByLoginName/" + user.LoginName);
                 if (userResponse != null)
                 {
                     u = userResponse.Data;
@@ -103,7 +104,7 @@ namespace WebPWA.Client.ViewModel
         public async Task<string> GetUserRole(Guid userID)
         {
             ServiceResponse<string> userResponse = new ServiceResponse<string>();
-            userResponse = await httpClient.GetFromJsonAsync<ServiceResponse<string>>("http://localhost:70/WebAPI/User/GetRoleByUser/" + userID.ToString());
+            userResponse = await httpClient.GetFromJsonAsync<ServiceResponse<string>>(Config.Config.ApiUrl + "/User/GetRoleByUser/" + userID.ToString());
             if (userResponse != null)
                 return userResponse.Data;
             return null;
@@ -143,5 +144,6 @@ namespace WebPWA.Client.ViewModel
                 IsActive = userViewModel.IsActive
             };
         }
+
     }
 }

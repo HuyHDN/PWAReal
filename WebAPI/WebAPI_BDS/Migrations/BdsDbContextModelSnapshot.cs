@@ -171,6 +171,12 @@ namespace WebAPI_BDS.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Image2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image3")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool?>("IsNegotiable")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -222,6 +228,11 @@ namespace WebAPI_BDS.Migrations
 
                     b.Property<DateTime>("ValidityDateTo")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("ViewCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
 
                     b.Property<float?>("Width")
                         .HasColumnType("real");

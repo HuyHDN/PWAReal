@@ -1,3 +1,495 @@
 ﻿@page "/"
+@using Client.ViewModel
+@using WebRealEste.Shared
+@using System.Net.Http.Headers;
+@inject NavigationManager NavigationManager
+@inject PropertyViewModel _propertyViewModel
+@inject UserViewModel _userViewModel
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
 
-<HomePage/>
+@if (isLoaded)
+{
+    <div id="preloder" style="display: @(isLoaded ? "none" : "")">
+        <div class="loader"></div>
+    </div>
+}
+else
+{
+    <div id="preloder" style="display: @(isLoaded ? "none" : "")">
+        <div class="loader"></div>
+    </div>
+}
+
+<!-- Header section -->
+<HeaderMenu />
+
+<!-- Hero section -->
+<section class="hero-section set-bg" style="background-image: url(Content/image/bg.jpg);">
+    <div class="container hero-text text-white">
+        <h2 class="title-header">HÃY TÌM NGÔI NHÀ MƠ ƯỚC CHO BẠN VỚI KINH NGHIỆM BẢN ĐỊA CỦA CHÚNG TÔI</h2>
+        @*<p> trong giachinhchu.com®.</p>*@@*<br>Find property info from the most comprehensive source data.*@
+        <a href="/property/listing" class="site-btn">Xem Chi tiết</a>
+    </div>
+</section>
+<!-- Hero section end -->
+<!-- Filter form section -->
+<div class="filter-search">
+    <div class="container">
+        <form class="filter-form">
+            <input type="text" @bind="_propertyViewModel.Title" placeholder="Tìm Kiếm (đường, phường, quận, thành phố, tiêu đề)">
+            <select @bind="_propertyViewModel.PropertyTypeID">
+                <option value="@Guid.Empty">Loại nhà đất</option>
+                @foreach (var type in lstPropertyType)
+                {
+                    <option value="@type.ID">@type.Name</option>
+                }
+            </select>
+            <select @onchange="CityChange">
+                <option value="0">Tỉnh / Thành phố</option>
+                @foreach (var city in lstCity)
+                {
+                    <option value="@city.ID">@city.Name</option>
+                }
+            </select>
+            <select @onchange="DistrictChange">
+                <option value="0">Quận / Huyện</option>
+                @foreach (var district in lstDistrict)
+                {
+                    <option value="@district.ID">@district.Name</option>
+                }
+            </select>
+            <select @bind="_propertyViewModel.LocationID">
+                <option value="@Guid.Empty">Phường / Xã</option>
+                @foreach (var ward in lstWard)
+                {
+                    <option value="@ward.ID">@ward.Name</option>
+                }
+            </select>
+            <select @bind="_propertyViewModel.OrientationID">
+                <option value="@Guid.Empty">KXĐ</option>
+                @foreach (var ori in lstOrientation)
+                {
+                    <option value="@ori.ID">@ori.Name</option>
+                }
+            </select>
+            <select @bind="selectedPrice">
+                <option value="-1">Mức giá</option>
+                <option value="0">&lt; 500 triệu</option>
+                <option value="1">500 triệu -> 1 tỷ</option>
+                <option value="2">1 tỷ -> 2 tỷ</option>
+                <option value="3">2 tỷ -> 3 tỷ</option>
+                <option value="4">3 tỷ -> 5 tỷ</option>
+                <option value="5">5 tỷ -> 10 tỷ</option>
+                <option value="6">> 10 tỷ</option>
+            </select>
+            <select @bind="selectedArea">
+                <option value="-1">Diện tích</option>
+                <option value="0">0 -> 30 m²</option>
+                <option value="1">30 m² -> 50 m²</option>
+                <option value="2">50 m² -> 80 m²</option>
+                <option value="3">80 m² -> 100 m²</option>
+                <option value="4">100 m² -> 150 m²</option>
+                <option value="5">150 m² -> 200 m²</option>
+                <option value="6">> 200 m²</option>
+            </select>
+            <select @bind="selectedRoom">
+                <option value="-1">Phòng ngủ</option>
+                <option value="1">1+</option>
+                <option value="2">2+</option>
+                <option value="3">3+</option>
+                <option value="4">4+</option>
+                <option value="5">5+</option>
+            </select>
+            <button class="site-btn fs-submit btn-margin" type="button" @onclick="HandleSearch" style="margin-top: 10px">Tìm kiếm</button>
+            <button class="site-btn fs-submit" type="button" @onclick="ClearFilter">Xóa</button>
+        </form>
+    </div>
+</div>
+<!-- Filter form section end -->
+<!-- Properties section -->
+<section class="properties-section spad">
+    <div class="container">
+        <div class="section-title text-center">
+            <h3>GẦN ĐÂY</h3>
+            <p>Khám phá những ngôi nhà đẹp mới dược đăng bán</p>
+        </div>
+        <div class="row">
+            <Virtualize Items="lstHotProperty" Context="p">
+                @{propertyUrl = "/property/single/" + p.ID.ToString();}
+                <div class="col-md-6">
+                    <div class="propertie-item set-bg" style="background-image: url(@(Config.Config.ApiUrl + "/Property/GetImage/" + p.Image))">
+                        <div class="sale-notic">NỔI BẬT</div>
+                        <div class="propertie-info text-white">
+                            <div class="info-warp">
+                                <a href="@propertyUrl">
+                                    <h5>@p.Address</h5>
+                                </a>
+                                <p><i class="fa fa-map-marker"></i> @p.Location.FullPath</p>
+                            </div>
+                            @if (p.PriceFrom != null && p.PriceFrom != 0 && p.PriceTo != null && p.PriceTo != 0)
+                            {
+                                <a href="@propertyUrl">
+                                    <div class="price" style="cursor: pointer">@_propertyViewModel.PriceToString(p.PriceFrom.Value) - @_propertyViewModel.PriceToString(p.PriceTo.Value)</div>
+                                </a>
+                            }
+                            else
+                            {
+                                <a href="@propertyUrl">
+                                    <div class="price" style="cursor: pointer">Thỏa thuận</div>
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </Virtualize>
+        </div>
+    </div>
+</section>
+<!-- Properties section end -->
+<!-- Services section -->
+<section class="services-section spad set-bg" style="background-image: url(Content/image/service-bg.jpg)">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6">
+                <img src="Content/image/service.jpg" alt="">
+            </div>
+            <div class="col-lg-5 offset-lg-1 pl-lg-0">
+                <div class="section-title text-white">
+                    <h3>DỊCH VỤ CỦA CHÚNG TÔI</h3>
+                    <p>Chúng tôi cung cấp dịch vụ hoàn hảo cho người dùng</p>
+                </div>
+                <div class="services">
+                    <div class="service-item">
+                        <i class="fa fa-comments"></i>
+                        <div class="service-text">
+                            <h5>Dịch Vụ Tư Vấn</h5>
+                            @*<p>In Aenean purus, pretium sito amet sapien denim consectet sed urna placerat sodales magna leo.</p>*@
+                        </div>
+                    </div>
+                    <div class="service-item">
+                        <i class="fa fa-home"></i>
+                        <div class="service-text">
+                            <h5>Quản Lý Bất Động Sản</h5>
+                            @*<p>In Aenean purus, pretium sito amet sapien denim consectet sed urna placerat sodales magna leo.</p>*@
+                        </div>
+                    </div>
+                    <div class="service-item">
+                        <i class="fa fa-briefcase"></i>
+                        <div class="service-text">
+                            <h5>Cho Thuê Và Bán</h5>
+                            @*<p>In Aenean purus, pretium sito amet sapien denim consectet sed urna placerat sodales magna leo.</p>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Services section end -->
+<!-- feature section -->
+<section class="feature-section spad">
+    <div class="container">
+        <div class="section-title text-center">
+            <h3>DANH SÁCH NỔI BẬT</h3>
+            <p>Duyệt nhà và căn hộ để bán và cho thuê trong khu vực của bạn</p>
+        </div>
+        <div class="row">
+            <Virtualize Items="lstNewProperty" Context="p">
+                @{propertyUrl = "/property/single/" + p.ID.ToString();}
+                <div class="col-lg-4 col-md-6">
+                    <!-- feature -->
+                    <div class="feature-item">
+                        <a href="@propertyUrl">
+                            <div class="feature-pic set-bg" style="cursor: pointer; background-image: url(@(Config.Config.ApiUrl + "/Property/GetImage/" + p.Image))">
+                                <div class="sale-notic">MỚI</div>
+                            </div>
+                        </a>
+                        <div class="feature-text">
+                            <div class="text-center feature-title">
+                                <a href="@propertyUrl"><h5 style="cursor: pointer">@p.Title</h5></a>
+                                <p><i class="fa fa-map-marker"></i> @p.Address</p>
+                            </div>
+                            <div class="room-info-warp">
+                                <div class="room-info">
+                                    <div class="rf-left">
+                                        <p><i class="fa fa-th-large"></i> @p.Area m²</p>
+                                        <p><i class="fa fa-bed"></i> @p.NoOfRooms Phòng ngủ</p>
+                                    </div>
+                                    <div class="rf-right">
+                                        <p><i class="fa fa-building"></i> @p.NoOfStorey Lầu</p>
+                                        <p><i class="fa fa-bath"></i> @p.NoOfToilets Toilet</p>
+                                    </div>
+                                </div>
+                                <div class="room-info">
+                                    <div class="rf-left">
+                                        @if (p.CreatedUser != null)
+                                        {
+                                            <p><i class="fa fa-user"></i> @p.CreatedUser.FullName</p>
+                                        }
+                                    </div>
+                                    <div class="rf-right">
+                                        <p><i class="fa fa-clock-o"></i> @(DateTime.Today.Subtract(p.CreatedDateTime).Days > 0 ? DateTime.Today.Subtract(p.CreatedDateTime).Days.ToString() + " ngày trước" : "Hôm nay")</p>
+                                    </div>
+                                </div>
+                            </div>
+                            @if (p.PriceFrom != null && p.PriceFrom != 0 && p.PriceTo != null && p.PriceTo != 0)
+                            {
+                                <a href="@propertyUrl" class="room-price">@_propertyViewModel.PriceToString(p.PriceFrom.Value) - @_propertyViewModel.PriceToString(p.PriceTo.Value)</a>
+                            }
+                            else
+                            {
+                                <a href="@propertyUrl" class="room-price">Thỏa thuận</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </Virtualize>
+        </div>
+    </div>
+</section>
+<!-- feature section end -->
+<!-- feature category section -->
+<section class="feature-category-section spad">
+    <div class="container">
+        <div class="section-title text-center">
+            <h3>TÌM KIẾM TÀI SẢN</h3>
+            <p>Những loại tài sản bạn đang tìm kiếm? Chúng tôi sẽ giúp bạn.</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-6 f-cata">
+                <img src="Content/image/feature-cate/1.jpg" alt="">
+                <h5>Chung cư</h5>
+            </div>
+            <div class="col-lg-3 col-md-6 f-cata">
+                <img src="Content/image/feature-cate/2.jpg" alt="">
+                <h5>Nhà ở</h5>
+            </div>
+            <div class="col-lg-3 col-md-6 f-cata">
+                <img src="Content/image/feature-cate/3.jpg" alt="">
+                <h5>Biệt thự nghỉ dưỡng</h5>
+            </div>
+            <div class="col-lg-3 col-md-6 f-cata">
+                <img src="Content/image/feature-cate/4.jpg" alt="">
+                <h5>Văn phòng</h5>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- feature category section end-->
+<!-- Gallery section -->
+<section class="gallery-section spad">
+    <div class="container">
+        <div class="section-title text-center">
+            <h3>ĐỊA ĐIỂM PHỔ BIẾN</h3>
+            <p>Chúng tôi hiểu giá trị và tầm quan trọng của địa điểm</p>
+        </div>
+        <div class="gallery" style="position: relative;">
+            <div class="grid-sizer"></div>
+            <a href="#" class="region1 gallery-item grid-long set-bg" style="background-image: url(Content/image/gallery/1.jpg);">
+                <div class="gi-info">
+                    <h3>Tân Bình</h3>
+                    <p>5 mẩu tin tức.</p>
+                </div>
+            </a>
+            <a href="#" class="region2 gallery-item grid-wide set-bg" style="background-image: url(Content/image/gallery/2.jpg);">
+                <div class="gi-info">
+                    <h3>Quận 2</h3>
+                    <p>8 mẫu tin tức</p>
+                </div>
+            </a>
+            <a href="#" class="region3 gallery-item set-bg" style="background-image: url(Content/image/gallery/3.jpg);">
+                <div class="gi-info">
+                    <h3>Quân 1</h3>
+                    <p>72 mẫu tin tức</p>
+                </div>
+            </a>
+            <a href="#" class="region4 gallery-item set-bg" style="background-image: url(Content/image/gallery/4.jpg);">
+                <div class="gi-info">
+                    <h3>Quân 3</h3>
+                    <p>50 Mẫu tin tức</p>
+                </div>
+            </a>
+
+        </div>
+    </div>
+</section>
+<!-- Gallery section end -->
+<!-- Review section -->
+<section class="review-section set-bg" style="background-image: url(Content/image/review-bg.jpg)">
+    <div class="container">
+        <div class="review-slider owl-carousel">
+            <div class="review-item text-white">
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                </div>
+                <p>“GiaChinhChu was quick to understand my needs and steer me in the right direction. Their professionalism and warmth made the process of finding a suitable home a lot less stressful than it could have been. Thanks, agent Tony Holland.”</p>
+                <h5>Stacy Mc Neeley</h5>
+                <span>CEP’s Director</span>
+                <div class="clint-pic set-bg" style="background-image: url(Content/image/review/1.jpg)"></div>
+            </div>
+            <div class="review-item text-white">
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                </div>
+                <p>“GiaChinhChu was quick to understand my needs and steer me in the right direction. Their professionalism and warmth made the process of finding a suitable home a lot less stressful than it could have been. Thanks, agent Tony Holland.”</p>
+                <h5>Stacy Mc Neeley</h5>
+                <span>CEP’s Director</span>
+                <div class="clint-pic set-bg" style="background-image: url(Content/image/review/1.jpg)"></div>
+            </div>
+            <div class="review-item text-white">
+                <div class="rating">
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                    <i class="fa fa-star"></i>
+                </div>
+                <p>“GiaChinhChu was quick to understand my needs and steer me in the right direction. Their professionalism and warmth made the process of finding a suitable home a lot less stressful than it could have been. Thanks, agent Tony Holland.”</p>
+                <h5>Stacy Mc Neeley</h5>
+                <span>CEP’s Director</span>
+                <div class="clint-pic set-bg" style="background-image: url(Content/image/review/1.jpg)"></div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Review section end-->
+<!-- Blog section -->
+<section class="blog-section spad">
+    <div class="container">
+        <div class="section-title text-center">
+            <h3>TIN MỚI NHẤT</h3>
+            <p>Tiêu đề tin tức bất động sản trên toàn thế giới.</p>
+        </div>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 blog-item">
+                <img src="Content/image/blog/1.jpg" alt="">
+                <h5><a href="single-blog.html">CHÍNH CHỦ SANG NHƯỢNG CĂN GÓC TẦNG 22 VIEW TUYỆT ĐẸP SUNSHINE CITY SÀI GÒN Q7</a></h5>
+                <div class="blog-meta">
+                    <span><i class="fa fa-user"></i>Phường Tân Phú, Quận 7, Hồ Chí Minh, Việt Nam</span>
+                    <span><i class="fa fa-clock-o"></i>25 Jun 2020</span>
+                </div>
+                <p>- Chính chủ sang nhượng căn hộ cực đẹp Tòa S1 Sunshine City SG, diện tích 69m2, 2 phòng ngủ, 2WC, cửa nhà hướng Đông Nam, ban công hướng Tây Bắc...</p>
+            </div>
+            <div class="col-lg-4 col-md-6 blog-item">
+                <img src="Content/image/blog/2.jpg" alt="">
+                <h5><a href="single-blog.html">HÀ ĐÔ MỞ BÁN 44 CĂN NỘI BỘ CĐT TT 30% VAY 70% NHẬN NHÀ LIỀN, 120 CĂN SANG NHƯỢNG GIÁ TỐT 0906767248</a></h5>
+                <div class="blog-meta">
+                    <span><i class="fa fa-user"></i>Quận 10, Hồ Chí Minh, Việt Nam</span>
+                    <span><i class="fa fa-clock-o"></i>25 Jun 2020</span>
+                </div>
+                <p>
+                    Mở bán 44 căn suất nội bộ cuối cùng của chủ đầu tư và giỏ hàng hơn 100 căn chuyển nhượng giá tốt nhất thị trường.
+                    Em cam kết tìm cho anh chị những căn đẹp và phù hợp nhất theo nhu cầu mua của anh chị tại dự án Hà Đô Centrosa. Hiện tại giỏ hàng của em đang có 188 căn....
+                </p>
+            </div>
+            <div class="col-lg-4 col-md-6 blog-item">
+                <img src="Content/image/blog/3.jpg" alt="">
+                <h5><a href="single-blog.html">BIỆT THỰ CAO CẤP ĐẲNG CẤP NĂM SAO THE MANOR CENTRAL PARK DIỆN TÍCH TỪ 200-300M2 GIÁ 31 TỶ</a></h5>
+                <div class="blog-meta">
+                    <span><i class="fa fa-user"></i>Dự án The Manor Central Park, Hoàng Mai, Hà Nội</span>
+                    <span><i class="fa fa-clock-o"></i>25 Jun 201</span>
+                </div>
+                <p>
+                    - Các lô Biệt thự vị trí đẹp view công viên, vườn hoa và bể bơi, gần ngay công viên trung tâm, công viên Chu Văn An rộng 100m2.
+                    - Biệt thự phong cách Singapore hiện đại, biệt thự phong cách Châu Âu cổ điển sang trọng....
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Blog section end -->
+<!-- Footer section -->
+<Footer />
+
+@code{
+    bool isLoaded = false;
+    List<Code> lstPropertyType = new List<Code>();
+    List<Location> lstCity = new List<Location>();
+    List<Location> lstDistrict = new List<Location>();
+    List<Location> lstWard = new List<Location>();
+    List<Code> lstOrientation = new List<Code>();
+    List<Code> lstAds = new List<Code>();
+    List<Property> lstHotProperty = new List<Property>();
+    List<Property> lstNewProperty = new List<Property>();
+    Guid selectedCityID, selectedDistrictID;
+    int selectedPrice, selectedArea, selectedRoom;
+    string propertyUrl, key = "searchInfo";
+    PropertySearchInfo searchInfo = new PropertySearchInfo();
+
+    protected override async Task OnInitializedAsync()
+    {
+        _propertyViewModel.Title = "";
+        _propertyViewModel.PropertyTypeID = _propertyViewModel.OrientationID = selectedCityID = selectedDistrictID = _propertyViewModel.LocationID = Guid.Empty;
+        selectedPrice = selectedArea = selectedRoom = -1;
+        lstAds = await _propertyViewModel.GetNewType();
+        lstPropertyType = await _propertyViewModel.GetPropertyType();
+        lstOrientation = await _propertyViewModel.GetOrientation();
+        lstHotProperty = await _propertyViewModel.GetPropertyByType("Hot");
+        lstNewProperty = await _propertyViewModel.GetPropertyByType("New");
+        isLoaded = true;
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            lstCity = await _propertyViewModel.GetCity();
+        }
+    }
+
+    private async Task CityChange(ChangeEventArgs e)
+    {
+        selectedCityID = Guid.Parse(e.Value.ToString());
+        lstDistrict = await _propertyViewModel.GetDistrict(selectedCityID);
+        lstWard = new List<Location>();
+        _propertyViewModel.LocationID = Guid.Empty;
+    }
+
+    private async Task DistrictChange(ChangeEventArgs e)
+    {
+        selectedDistrictID = Guid.Parse(e.Value.ToString());
+        lstWard = await _propertyViewModel.GetWard(selectedDistrictID);
+        _propertyViewModel.LocationID = Guid.Empty;
+    }
+
+    private void ClearFilter()
+    {
+        lstDistrict = new List<Location>();
+        lstWard = new List<Location>();
+        _propertyViewModel.PropertyTypeID = selectedCityID = selectedDistrictID = _propertyViewModel.LocationID = Guid.Empty;
+        _propertyViewModel.OrientationID = Guid.Empty;
+        selectedPrice = selectedArea = selectedRoom = -1;
+    }
+
+    private void HandleSearch()
+    {
+        searchInfo.Title = _propertyViewModel.Title == string.Empty ? "notitle" : _propertyViewModel.Title;
+        if (_propertyViewModel.LocationID != Guid.Empty)
+            searchInfo.SelectedLocation = _propertyViewModel.LocationID;
+        else if (selectedDistrictID != Guid.Empty)
+            searchInfo.SelectedLocation = selectedDistrictID;
+        else
+            searchInfo.SelectedLocation = selectedCityID;
+        searchInfo.SelectedCate = _propertyViewModel.PropertyTypeID.Value;
+        searchInfo.SelectedOri = _propertyViewModel.OrientationID.Value;
+        searchInfo.Price = selectedPrice;
+        searchInfo.Room = selectedRoom;
+        searchInfo.Area = selectedArea;
+        SaveLocalStorage();
+        NavigationManager.NavigateTo("/property/search", true);
+    }
+
+    public async void SaveLocalStorage()
+    {
+        await localStorage.SetItemAsync(key, searchInfo);
+    }
+
+}

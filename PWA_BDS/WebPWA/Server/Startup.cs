@@ -1,16 +1,15 @@
+using Blazored.LocalStorage;
+using BlazorStrap;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.ResponseCompression;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using WebPWA.Shared;
-using Blazored.LocalStorage;
 
-namespace WebPWA.Server
+namespace WebRealEste.Server
 {
     public class Startup
     {
@@ -28,14 +27,8 @@ namespace WebPWA.Server
 
             services.AddControllersWithViews();
             services.AddRazorPages();
-            services.AddSingleton<UserSession>();
             services.AddBlazoredLocalStorage();
-
-            services.AddAuthentication(option =>
-            {
-                option.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            }
-            ).AddCookie();
+            services.AddBootstrapCss();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -58,8 +51,6 @@ namespace WebPWA.Server
             app.UseStaticFiles();
 
             app.UseRouting();
-
-            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

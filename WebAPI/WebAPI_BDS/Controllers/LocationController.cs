@@ -34,6 +34,12 @@ namespace WebAPI_BDS.Controllers
             return Ok(await _locationService.GetLocationByID(id));
         }
 
+        [HttpGet("GetLocationPathByID/{id}")]
+        public IActionResult GetLocationPathByID(string id)
+        {
+            return Ok(_locationService.GetLocationPath(id));
+        }
+
         [HttpGet("GetDistrict/{id}")]
         public async Task<IActionResult> GetDistrict(string id)
         {

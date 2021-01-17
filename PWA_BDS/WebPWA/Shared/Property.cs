@@ -1,7 +1,7 @@
 ﻿using System;
-using WebPWA.Shared;
+using WebRealEste.Shared;
 
-namespace WebPWA.Shared
+namespace WebRealEste.Shared
 {
     public enum Orientation
     {
@@ -13,6 +13,8 @@ namespace WebPWA.Shared
         public Guid ID { get; set; }
         public string Title { get; set; }
         public string Image { get; set; }
+        public string Image2 { get; set; }
+        public string Image3 { get; set; }
         public string Content { get; set; }
         public DateTime ValidityDateFrom { get; set; }
         public DateTime ValidityDateTo { get; set; }
@@ -41,6 +43,7 @@ namespace WebPWA.Shared
         public DateTime CreatedDateTime { get; set; }
         public DateTime LastModifiedDateTime { get; set; }
         public DateTime SuccessedDateTime { get; set; }
+        public int ViewCount { get; set; }
 
         public static string StatusToString(int status)
         {

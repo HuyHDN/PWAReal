@@ -43,8 +43,9 @@ namespace WebAPI_BDS.Controllers
             return Ok(await _propertyService.GetNewType());
         }
 
+
         [HttpPost("Upload")]
-        public IActionResult Upload()
+        public IActionResult Upload(Guid id)
         {
             try
             {
@@ -74,7 +75,7 @@ namespace WebAPI_BDS.Controllers
         }
 
         [HttpGet("GetImage/{imageName}")]
-        public IActionResult GetImage(string imageName)
+        public IActionResult GetImage(Guid id,string imageName)
         {
             var folderName = Path.Combine("StaticFiles", "Images");
             var pathToSave = Path.Combine(Directory.GetCurrentDirectory(), folderName);
@@ -83,7 +84,7 @@ namespace WebAPI_BDS.Controllers
         }
 
         [Route("GetPropertyByUserID/{userID}")]
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<IActionResult> GetPropertyByUserID(Guid userID)
         {
             return Ok(await _propertyService.GetPropertyByUserID(userID));
@@ -96,10 +97,31 @@ namespace WebAPI_BDS.Controllers
         }
 
         [Route("GetPropertyByID/{id}")]
-        [HttpGet("{id}")]
+        [HttpGet]
         public async Task<IActionResult> GetPropertyByID(Guid id)
         {
             return Ok(await _propertyService.GetPropertyByID(id));
+        }
+
+        [Route("GetPendingProperty")]
+        [HttpGet]
+        public async Task<IActionResult> GetPendingProperty()
+        {
+            return Ok(await _propertyService.GetPendingProperty());
+        }
+
+        [Route("GetPropertyByType/{type}")]
+        [HttpGet]
+        public async Task<IActionResult> GetPropertyByType(string type)
+        {
+            return Ok(await _propertyService.GetPropertyByType(type));
+        }
+
+        [Route("GetSearchProperty/{title}/{locationID}/{cateID}/{oriID}/{price}/{area}/{room}")]
+        [HttpGet]
+        public async Task<IActionResult> GetSearchProperty(string title, Guid locationID, Guid cateID, Guid oriID, int price, int area, int room)
+        {
+            return Ok(await _propertyService.GetSearchProperty(title, locationID, cateID, oriID, price, area, room));
         }
 
 
@@ -123,5 +145,17 @@ namespace WebAPI_BDS.Controllers
             return Ok(await _propertyService.DeleteProperty(id));
         }
 
+        [HttpPut("UpdatePropertyView/{id}")]
+        public async Task<IActionResult> UpdatePropertyView(Guid id)
+        {
+            return Ok(await _propertyService.UpdatePropertyView(id));
+        }
+
+        [Route("GetVerifiedProperty")]
+        [HttpGet]
+        public async Task<IActionResult> GetVerifiedProperty()
+        {
+            return Ok(await _propertyService.GetVerifiedProperty());
+        }
     }
 }

@@ -1,0 +1,243 @@
+﻿@using WebRealEste.Shared
+@using Client.ViewModel
+@inject UserViewModel _userViewModel
+@inject NavigationManager NavigationManager
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<header class="header-section">
+    <div class="header-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 header-top-left">
+                    <div class="top-info">
+                        <i class="fa fa-phone"></i>
+                        (+84) 888 888 888
+                    </div>
+                    <div class="top-info">
+                        <i class="fa fa-envelope"></i>
+                        reals@amberos.com
+                    </div>
+                </div>
+                <div class="col-lg-8 text-lg-right header-top-right">
+                    <div class="top-social">
+                        <a href=""><i class="fa fa-facebook"></i></a>
+                        <a href=""><i class="fa fa-twitter"></i></a>
+                        <a href=""><i class="fa fa-instagram"></i></a>
+                        <a href=""><i class="fa fa-pinterest"></i></a>
+                        <a href=""><i class="fa fa-linkedin"></i></a>
+                    </div>
+                    <div class="user-panel">
+                        @if (userLogin)
+                        {
+                            <a href="/profile"><i class="fa fa-user"></i> @currentUser.FullName</a>
+                            <a href="/property/addproperty" style="cursor:pointer"><i class="fa fa-newspaper-o"></i> Đăng tin</a>
+                            <span @onclick="LogoutUser" style="cursor:pointer" title="Logout"><i class="fa fa-sign-out"></i> </span>
+                        }
+                        else
+                        {
+                            <span @onclick="OpenRegister" style="cursor:pointer"><i class="fa fa-user-circle-o"></i> Đăng ký</span>
+                            <span @onclick="OpenLogin" style="cursor:pointer"><i class="fa fa-sign-in"></i> Đăng nhập</span>
+                            <a href="/property/addproperty"><i class="fa fa-newspaper-o"></i> Đăng tin</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="site-navbar">
+                    <a href="#" class="site-logo"><img src="Content/image/logo__.png" alt=""></a>
+                    <div class="nav-switch" @onclick="ToggleNavMenu">
+                        <i class="fa fa-bars"></i>
+                    </div>
+                    <ul class="main-menu @NavMenuCssClass">
+                        <li><a href="/">Trang Chủ</a></li>
+                        <li><a href="/property/listing">Danh Sách Nổi Bật</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<div class="modal" style="background-color: rgba(0,0,0, 0.4);display: @(isLogin ?  "block" : "none")">
+    <div class="login">
+        <div class="inset">
+            <div class="modal-header">
+                <h5 class="modal-title">Login</h5>
+                <button type="button" @onclick="CloseLogin" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="@user" OnValidSubmit="HandleLogin">
+                    <DataAnnotationsValidator />
+                    <div>
+                        <span><label for="username">Username</label></span>
+                        <span><input type="text" @bind-value="user.LoginName" class="textbox" id="username"></span>
+                    </div>
+                    <div>
+                        <span><label for="password">Password</label></span>
+                        <span><input type="password" @bind-value="user.Password" class="password"></span>
+                    </div>
+                    @if (!isLoginSuccess)
+                    {
+                        <div style="text-align: center">
+                            <span style="color: red">Đăng nhập không thành công</span>
+                        </div>
+                    }
+                    <div class="sign">
+                        <div class="submit">
+                            <input type="submit" value="LOGIN">
+                        </div>
+                        <div class="submit">
+                            <input type="button" @onclick="CloseLogin" value="CANCEL">
+                        </div>
+                        <div class="clear"> </div>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal" style="background-color: rgba(0,0,0, 0.4);display: @(isRegister ?  "block" : "none")">
+    <div class="login" style="margin: 50px auto;">
+        <div class="inset register" style="height: 85%; overflow-y: auto; position: absolute">
+            <div class="modal-header">
+                <h5 class="modal-title">Register</h5>
+                <button type="button" @onclick="CloseRegister" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <EditForm Model="@_userViewModel" OnValidSubmit="HandleRegister">
+                    <DataAnnotationsValidator />
+                    <div>
+                        <span><input type="text" placeholder="Email" class="textbox" @bind-value="_userViewModel.LoginName" id="email"></span>
+                        <ValidationMessage For="@(() => _userViewModel.LoginName)" />
+                    </div>
+                    <div>
+                        <span><input type="text" placeholder="Họ tên" class="textbox" @bind-value="_userViewModel.FullName" id="fullname"></span>
+                        <ValidationMessage For="@(() => _userViewModel.FullName)" />
+                    </div>
+                    <div>
+                        <span><input type="text" placeholder="Địa chỉ" class="textbox" @bind-value="_userViewModel.Address" id="address"></span>
+                    </div>
+                    <div>
+                        <span><input type="number" oninput="this.value=this.value.slice(0,this.maxLength)" placeholder="Điện thoại" class="textbox" @bind-value="_userViewModel.Phone" maxlength="12" id="phone"></span>
+                        <ValidationMessage For="@(() => _userViewModel.Phone)" />
+                    </div>
+                    <div>
+                        <span><input type="password" placeholder="Mật khẩu" class="password" @bind-value="_userViewModel.LoginPassword" id="password"></span>
+                        <ValidationMessage For="@(() => _userViewModel.LoginPassword)" />
+                    </div>
+                    <div>
+                        <span><input type="password" placeholder="Nhập lại mật khẩu" class="password" @bind-value="_userViewModel.ConfirmPassword" id="confirmpassword"></span>
+                        <ValidationMessage For="@(() => _userViewModel.ConfirmPassword)" />
+                    </div>
+                    @if (!isRegisterSuccess)
+                    {
+                        <div style="text-align: center">
+                            <span style="color: red">Đăng ký không thành công</span>
+                        </div>
+                    }
+                    <div class="sign">
+                        <div class="submit">
+                            <input type="submit" value="SUBMIT">
+                        </div>
+                        <div class="submit">
+                            <input type="button" @onclick="CloseRegister" value="CANCEL">
+                        </div>
+                        <div class="clear"> </div>
+                    </div>
+                </EditForm>
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    bool isLogin = false, isRegister = false, userLogin = false;
+
+    protected void OpenLogin()
+    {
+        isLogin = true;
+    }
+
+    protected void CloseLogin()
+    {
+        isLogin = false;
+    }
+
+    protected void OpenRegister()
+    {
+        isRegister = true;
+    }
+
+    protected void CloseRegister()
+    {
+        isRegister = false;
+    }
+
+    UserLogin user = new UserLogin();
+    User currentUser = new User();
+    UserSession userSession = new UserSession();
+    string key = "userInfo";
+    bool isLoginSuccess = true, isRegisterSuccess = true, collapseNavMenu = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        userSession = await localStorage.GetItemAsync<UserSession>(key);
+        if (userSession != null)
+        {
+            userLogin = true;
+            currentUser = await _userViewModel.GetUserByID(userSession.UserID);
+        }
+        else userSession = new UserSession();
+    }
+
+    public async Task HandleLogin()
+    {
+        _userViewModel.LoginName = user.LoginName;
+        _userViewModel.LoginPassword = user.Password;
+        User currentUser = await _userViewModel.LoginUser();
+        if (currentUser != null)
+        {
+            userSession.LoginName = user.LoginName;
+            userSession.RoleCode = await _userViewModel.GetUserRole(currentUser.ID);
+            userSession.UserID = currentUser.ID;
+            SaveLocalStorage();
+            NavigationManager.NavigateTo("/", true);
+        }
+        else isLoginSuccess = false;
+    }
+
+    private void LogoutUser()
+    {
+        ClearLocalStorage();
+        NavigationManager.NavigateTo("/", true);
+    }
+
+    private async Task HandleRegister()
+    {
+        await _userViewModel.CreateUser();
+        CloseRegister();
+        OpenLogin();
+    }
+
+    private string NavMenuCssClass => collapseNavMenu ? "collapse" : null;
+
+    private void ToggleNavMenu()
+    {
+        collapseNavMenu = !collapseNavMenu;
+    }
+
+    public async void SaveLocalStorage()
+    {
+        await localStorage.SetItemAsync(key, userSession);
+    }
+
+    public async void ClearLocalStorage()
+    {
+        await localStorage.ClearAsync();
+    }
+}

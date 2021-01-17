@@ -1,0 +1,304 @@
+﻿@page "/profile"
+@using WebRealEste.Shared
+@using Client.ViewModel
+@inject NavigationManager NavigationManager
+@inject PropertyViewModel _propertyViewModel
+@inject UserViewModel _userViewModel
+@inject IJSRuntime _js
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+
+<HeaderMenu />
+
+@if (isLoaded)
+{
+    <div id="preloder" style="display: @(isLoaded ? "none" : "")">
+        <div class="loader"></div>
+    </div>
+}
+else
+{
+    <div id="preloder" style="display: @(isLoaded ? "none" : "")">
+        <div class="loader"></div>
+    </div>
+}
+<section class="page-top-section set-bg" style="background-image: url(Content/image/page-top-bg.jpg)">
+    <div class="container text-white">
+        <h2>TRANG CÁ NHÂN</h2>
+    </div>
+</section>
+<!--  Page top end -->
+<!-- Breadcrumb -->
+<div class="site-breadcrumb">
+    <div class="container">
+        <a href=""><i class="fa fa-home"></i>Trang chủ</a>
+        <span><i class="fa fa-angle-right"></i>Thông tin cá nhân</span>
+    </div>
+</div>
+
+<section class="page-section">
+    <div class="container">
+        <EditForm Model="@userDetail" OnValidSubmit="HandleUpdateUser">
+            <DataAnnotationsValidator />
+            <label class="addproperty_lblGroup">THÔNG TIN CÁ NHÂN</label>
+            <div class="form-inline">
+                <div class="form-inline" style="width:80%; margin-top: 10px">
+                    <label class="addproperty_lable">Họ tên</label>
+                    <InputText class="addproperty_Textbox" @bind-Value="userDetail.FullName" />
+                    <ValidationMessage For="@(() => userDetail.FullName)" />
+                </div>
+                <div class="form-inline" style="width:80%;  margin-top: 10px">
+                    <label class="addproperty_lable">Địa chỉ</label>
+                    <InputText class="addproperty_Textbox" @bind-Value="userDetail.Address" />
+                </div>
+                <div class="form-inline" style="width:80%; margin-top: 10px">
+                    <label class="addproperty_lable">Điện thoại</label>
+                    <InputText class="addproperty_Textbox" @bind-Value="userDetail.Phone" />
+                    <ValidationMessage For="@(() => userDetail.Phone)" />
+                </div>
+                <div class="form-inline" style="width:30%;  margin-top: 10px">
+                    <button type="submit" style="width: 150px" class="btn btn-primary">Cập nhật</button>
+                </div>
+            </div>
+            @if (success)
+            {
+                <br /><label>Cập nhật thành công</label>
+            }
+        </EditForm>
+        @if (isAdminLogin)
+        {
+            <label class="addproperty_lblGroup" style="margin-top: 30px;">DANH SÁCH TIN ĐĂNG CHỜ DUYỆT</label>
+            @if (lstPendingProperty != null && lstPendingProperty.Count > 0)
+            {
+                <div style="overflow-x: auto">
+                    <table id="customers">
+                        <tr>
+                            <th>STT</th>
+                            <th>Trạng thái</th>
+                            <th>Tiêu đề</th>
+                            <th>Ngày bắt đầu</th>
+                            <th>Ngày hết hạn</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                        @if (lstPendingProperty != null && lstPendingProperty.Count > 0)
+                        {
+                            int i = 0;
+                            foreach (Property p in lstPendingProperty)
+                            {
+                                i++;
+                                <tr>
+                                    <td>@i</td>
+                                    <td>@Property.StatusToString(p.Status)</td>
+                                    <td>@p.Title</td>
+                                    <td>@p.ValidityDateFrom.ToString("dd/MM/yyyy")</td>
+                                    <td>@p.ValidityDateTo.ToString("dd/MM/yyyy")</td>
+                                    <td><button class="btn btn-success" @onclick="() => HandleEdit(p.ID)">Edit</button></td>
+                                    <td><button class="btn btn-danger" @onclick="() => HandleDeleteClick(p.ID)">Delete</button></td>
+                                </tr>
+                            }
+                        }
+                    </table>
+                </div>
+            }
+        }
+        <label class="addproperty_lblGroup" style="margin-top: 30px;">DANH SÁCH TIN ĐĂNG CỦA BẠN</label>
+        @if (lstProperty != null && lstProperty.Count > 0)
+        {
+            <div style="overflow-x: auto">
+                <table id="customers">
+                    <tr>
+                        <th>STT</th>
+                        <th>Trạng thái</th>
+                        <th>Tiêu đề</th>
+                        <th>Ngày bắt đầu</th>
+                        <th>Ngày hết hạn</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    @if (lstProperty != null && lstProperty.Count > 0)
+                    {
+                        int i = 0;
+                        foreach (Property p in lstProperty)
+                        {
+                            i++;
+                            <tr>
+                                <td>@i</td>
+                                <td>@Property.StatusToString(p.Status)</td>
+                                <td>@p.Title</td>
+                                <td>@p.ValidityDateFrom.ToString("dd/MM/yyyy")</td>
+                                <td>@p.ValidityDateTo.ToString("dd/MM/yyyy")</td>
+                                <td><button class="btn btn-success" @onclick="() => HandleEdit(p.ID)">Edit</button></td>
+                                <td><button class="btn btn-info" @onclick="() => HandleAnalyticClick(p.ViewCount)">Analytic</button></td>
+                                <td><button class="btn btn-danger" @onclick="() => HandleDeleteClick(p.ID)">Delete</button></td>
+                            </tr>
+                        }
+                    }
+                </table>
+            </div>
+        }
+
+        @if (ShowConfirmation)
+        {
+            <div class="modal show d-block" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Xác nhận xóa</h5>
+                            <button type="button" @onclick="HandleClose" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p style="font-size: 20px;">Bạn chắc chắn muốn xóa tin đăng?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" @onclick="HandleDelete">Đồng ý</button>
+                            <button type="button" @onclick="HandleClose" class="btn btn-secondary" data-dismiss="modal">Không</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+
+        @if (ShowAnalytic)
+        {
+            <div class="modal show d-block" tabindex="-1" role="dialog">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Property Analytic</h5>
+                            <button type="button" @onclick="HandleClose" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p style="font-size: 20px; font-weight: bolder">Analytics của tin đăng</p>
+                            <label>Tổng lượt xem: <span>@views</span></label>
+                            <table id="customers">
+                                <tr>
+                                    <th>Vị trí trang</th>
+                                    <th>Thông tin tại vị trí này</th>
+                                    <th>Số lượt xem tại vị trí này</th>
+                                </tr>
+                                <tr>
+                                    <td>20% trang</td>
+                                    <td>Chỉ xem ảnh</td>
+                                    <td>@views</td>
+                                </tr>
+                                <tr>
+                                    <td>40% trang</td>
+                                    <td>Xem mô tả chi tiết</td>
+                                    @if (views > 0)
+                                    {
+                                        <td>@(rand.Next() % views)</td>
+                                    }
+                                    else
+                                    {
+                                        <td>@views</td>
+                                    }
+                                </tr>
+                                <tr>
+                                    <td>60% trang</td>
+                                    <td>Xem nội thất và tiện ích</td>
+                                    <td>@views1</td>
+                                </tr>
+                                <tr>
+                                    <td>80% trang</td>
+                                    <td>Xem video</td>
+                                    <td>@views2</td>
+                                </tr>
+                                <tr>
+                                    <td>100% trang</td>
+                                    <td>Xem toàn bộ</td>
+                                    <td>@views3</td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" @onclick="HandleClose" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</section>
+
+@code {
+    bool isLoaded = false, success = false, isAdminLogin = false;
+    string key = "userInfo";
+    bool isLogin = false, ShowConfirmation = false, ShowAnalytic = false;
+    UserSession currentUser = new UserSession();
+    UserDetail userDetail = new UserDetail();
+    List<Property> lstProperty = new List<Property>();
+    List<Property> lstPendingProperty = new List<Property>();
+    Property analyticProperty = new Property();
+    Guid userID, id;
+    int views, views1, views2, views3;
+    Random rand = new Random();
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUser = await localStorage.GetItemAsync<UserSession>(key);
+        if (currentUser != null)
+        {
+            if (currentUser.RoleCode == "ADMIN")
+                isAdminLogin = true;
+            isLogin = true;
+            userID = currentUser.UserID;
+            userDetail = await _userViewModel.GetUserByID(userID);
+            lstProperty = await _propertyViewModel.GetPropertyByUserID(userID);
+            lstPendingProperty = await _propertyViewModel.GetPendingProperty();
+        }
+        isLoaded = true;
+    }
+
+    private async Task HandleUpdateUser()
+    {
+        _userViewModel.FullName = userDetail.FullName;
+        _userViewModel.Phone = userDetail.Phone;
+        _userViewModel.Address = userDetail.Address;
+        await _userViewModel.UpdateUser(userID);
+        success = true;
+    }
+
+    protected void HandleDeleteClick(Guid _id)
+    {
+        ShowConfirmation = true;
+        id = _id;
+    }
+
+    protected void HandleAnalyticClick(int viewCount)
+    {
+        ShowAnalytic = true;
+        views = viewCount;
+        if (views > 0)
+        {
+            Task.Delay(100);
+            views1 = rand.Next() % views;
+            Task.Delay(100);
+            views2 = rand.Next() % views;
+            Task.Delay(100);
+            views3 = rand.Next() % views;
+        }
+        else views1 = views2 = views3 = views;
+    }
+
+    protected void HandleClose()
+    {
+        ShowConfirmation = ShowAnalytic = false;
+    }
+
+    protected async Task HandleDelete()
+    {
+        await _propertyViewModel.DeleteProperty(id);
+        ShowConfirmation = false;
+        lstProperty = await _propertyViewModel.GetPropertyByUserID(userID);
+    }
+
+    protected void HandleEdit(Guid pID)
+    {
+        NavigationManager.NavigateTo("/property/propertyedit/" + pID.ToString());
+    }
+}

@@ -12,5 +12,6 @@ namespace WebAPI_BDS.Service
         Task<ServiceResponse<List<Location>>> GetDistrict(string CityID);
         Task<ServiceResponse<List<Location>>> GetWard(string DistrictID);
         Task<ServiceResponse<Location>> GetLocationByID(string locationID);
+        string GetLocationPath(string locationID);
     }
 }

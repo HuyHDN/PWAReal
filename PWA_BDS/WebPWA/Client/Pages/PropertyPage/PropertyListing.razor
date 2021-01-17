@@ -1,0 +1,113 @@
+﻿@page "/property/listing"
+@using Client.ViewModel
+@using WebRealEste.Shared
+@using System.Net.Http.Headers;
+@inject NavigationManager NavigationManager
+@inject PropertyViewModel _propertyViewModel
+@inject UserViewModel _userViewModel
+
+<!-- Header section -->
+<HeaderMenu />
+
+@if (isLoaded)
+{
+<div id="preloder" style="display: @(isLoaded ? "none" : "")">
+    <div class="loader"></div>
+</div>
+}
+else
+{
+<div id="preloder" style="display: @(isLoaded ? "none" : "")">
+    <div class="loader"></div>
+</div>
+}
+
+<section class="page-top-section set-bg" style="background-image: url(Content/image/page-top-bg.jpg)">
+    <div class="container text-white">
+        <h2>Featured Listings</h2>
+    </div>
+</section>
+<!--  Page top end -->
+<!-- Breadcrumb -->
+<div class="site-breadcrumb">
+    <div class="container">
+        <a href=""><i class="fa fa-home"></i>Home</a>
+        <span><i class="fa fa-angle-right"></i>Featured Listings</span>
+    </div>
+</div>
+
+
+<!-- page -->
+<section class="page-section categories-page">
+    <div class="container">
+        <div class="row">
+            @foreach (Property p in lstHotProperty)
+            {
+                propertyUrl = "/property/single/" + p.ID.ToString();
+                <div class="col-lg-4 col-md-6">
+                    <!-- feature -->
+                    <div class="feature-item">
+                        <a href="@propertyUrl">
+                            <div class="feature-pic set-bg" style="background-image: url(@(Config.Config.ApiUrl + "/Property/GetImage/" + p.Image))">
+                                <div class="sale-notic">NỔI BẬT</div>
+                            </div>
+                        </a>
+                        <div class="feature-text">
+                            <div class="text-center feature-title">
+                                <a href="@propertyUrl"><h5>@p.Title</h5></a>
+                                <p><i class="fa fa-map-marker"></i> @p.Address</p>
+                            </div>
+                            <div class="room-info-warp">
+                                <div class="room-info">
+                                    <div class="rf-left">
+                                        <p><i class="fa fa-th-large"></i> @p.Area m²</p>
+                                        <p><i class="fa fa-bed"></i> @p.NoOfRooms Phòng ngủ</p>
+                                    </div>
+                                    <div class="rf-right">
+                                        <p><i class="fa fa-building"></i> @p.NoOfStorey Lầu</p>
+                                        <p><i class="fa fa-bath"></i> @p.NoOfToilets Toilet</p>
+                                    </div>
+                                </div>
+                                <div class="room-info">
+                                    <div class="rf-left">
+                                        @if (p.CreatedUser != null)
+                                        {
+                                            <p><i class="fa fa-user"></i> @p.CreatedUser.FullName</p>
+                                        }
+                                    </div>
+                                    <div class="rf-right">
+                                        <p><i class="fa fa-clock-o"></i> @(DateTime.Today.Subtract(p.CreatedDateTime).Days > 0 ? DateTime.Today.Subtract(p.CreatedDateTime).Days.ToString() + " ngày trước" : "Hôm nay")</p>
+                                    </div>
+                                </div>
+                            </div>
+                            @if (p.PriceFrom != null && p.PriceFrom != 0 && p.PriceTo != null && p.PriceTo != 0)
+                            {
+                                <a href="@propertyUrl" class="room-price">@_propertyViewModel.PriceToString(p.PriceFrom.Value) - @_propertyViewModel.PriceToString(p.PriceTo.Value)</a>
+                            }
+                            else
+                            {
+                                <a href="@propertyUrl" class="room-price">Thỏa thuận</a>
+                            }
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
+
+<!-- page end -->
+<!-- Footer section -->
+<Footer />
+
+@code {
+    bool isLoaded = false;
+    List<Property> lstHotProperty = new List<Property>();
+    string propertyUrl;
+
+    protected override async Task OnInitializedAsync()
+    {
+        lstHotProperty = await _propertyViewModel.GetVerifiedProperty();
+        isLoaded = true;
+    }
+}
