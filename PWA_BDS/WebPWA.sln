@@ -1,13 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
-VisualStudioVersion = 16.0.30621.155
+VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebPWA.Server", "WebPWA\Server\WebPWA.Server.csproj", "{9E44922B-465A-46DF-8E28-EAF0DF4D8E20}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebRealEste.Server", "WebRealEste\Server\WebRealEste.Server.csproj", "{F0A0DFEB-C7D5-4B1A-88B6-6326F8D425D5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebPWA.Client", "WebPWA\Client\WebPWA.Client.csproj", "{91545E30-1B2F-4FAF-917C-213EA78617FB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebRealEste.Client", "WebRealEste\Client\WebRealEste.Client.csproj", "{A2113682-A4E6-47B1-81E0-440180501D79}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebPWA.Shared", "WebPWA\Shared\WebPWA.Shared.csproj", "{AA57AB69-4856-46B7-9E38-5E6CD004A649}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebRealEste.Shared", "WebRealEste\Shared\WebRealEste.Shared.csproj", "{38AE1BFD-2799-46B3-814C-BD9DBA0AF156}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,23 +15,23 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{9E44922B-465A-46DF-8E28-EAF0DF4D8E20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9E44922B-465A-46DF-8E28-EAF0DF4D8E20}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9E44922B-465A-46DF-8E28-EAF0DF4D8E20}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9E44922B-465A-46DF-8E28-EAF0DF4D8E20}.Release|Any CPU.Build.0 = Release|Any CPU
-		{91545E30-1B2F-4FAF-917C-213EA78617FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{91545E30-1B2F-4FAF-917C-213EA78617FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{91545E30-1B2F-4FAF-917C-213EA78617FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{91545E30-1B2F-4FAF-917C-213EA78617FB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AA57AB69-4856-46B7-9E38-5E6CD004A649}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AA57AB69-4856-46B7-9E38-5E6CD004A649}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AA57AB69-4856-46B7-9E38-5E6CD004A649}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AA57AB69-4856-46B7-9E38-5E6CD004A649}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F0A0DFEB-C7D5-4B1A-88B6-6326F8D425D5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F0A0DFEB-C7D5-4B1A-88B6-6326F8D425D5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F0A0DFEB-C7D5-4B1A-88B6-6326F8D425D5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F0A0DFEB-C7D5-4B1A-88B6-6326F8D425D5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2113682-A4E6-47B1-81E0-440180501D79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2113682-A4E6-47B1-81E0-440180501D79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2113682-A4E6-47B1-81E0-440180501D79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2113682-A4E6-47B1-81E0-440180501D79}.Release|Any CPU.Build.0 = Release|Any CPU
+		{38AE1BFD-2799-46B3-814C-BD9DBA0AF156}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{38AE1BFD-2799-46B3-814C-BD9DBA0AF156}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{38AE1BFD-2799-46B3-814C-BD9DBA0AF156}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{38AE1BFD-2799-46B3-814C-BD9DBA0AF156}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {BBD35333-6E87-429D-A029-BF93BF4D5454}
+		SolutionGuid = {7259A202-90CD-40DF-AAD1-28EF671235CD}
 	EndGlobalSection
 EndGlobal

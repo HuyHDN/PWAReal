@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace WebPWA.Shared
+namespace WebRealEste.Shared
 {
     public class Role
     {

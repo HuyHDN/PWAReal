@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" type="text/css" href="../Content/css/rangeslider-custom.css">
+    <title></title>
+</head>
+<body>
+    <div class="box-interest-rate">
+        <br />
+        <h3 class="sl-sp-title">Tính lãi suất </h3>
+        <div>
+
+
+
+            <div class="interest-rates">
+                <div class="input-rate">
+                    <div class="item form-group">
+                        <label class="inline">Giá trị nhà đất</label>
+                        <div class="inline btn-range">
+                            <input class="range-product-price" type="range"
+                                   min="0"
+                                   max="10000"
+                                   step="100"
+                                   value="0"
+                                   data-rangeslider />
+                        </div>
+                        <input type="text" value="0" class="inline product-price currency" id="c1" />
+                        <div class="inline unit"> Triệu </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="inline">Số tiền vay</label>
+                        <div class="inline btn-range">
+                            <input class="range-percent-price" type="range"
+                                   min="0"
+                                   max="100"
+                                   step="5"
+                                   value="70"
+                                   data-rangeslider />
+                        </div>
+                        <input type="text" class="inline amount currency" />
+                        <div class="inline unit unit-percent">
+                            <input type="number" value="70" class="percent-price currency" />%
+                        </div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="inline">Thời gian vay</label>
+                        <div class="inline btn-range">
+                            <input class="range-time" type="range"
+                                   min="1"
+                                   max="35"
+                                   step="1"
+                                   value="10"
+                                   data-rangeslider />
+                        </div>
+                        <input type="number" value="10" class="inline time currency" />
+                        <div class="inline unit">Năm</div>
+                    </div>
+                    <div class="item form-group">
+                        <label class="inline">Lãi suất</label>
+                        <div class="inline btn-range">
+                            <input class="range-interest" type="range"
+                                   min="0"
+                                   max="10"
+                                   step="0.1"
+                                   value="8"
+                                   data-rangeslider />
+                        </div>
+                        <input type="number" value="8" class="inline interest currency" />
+                        <div class="inline unit">% năm</div>
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="calculator-type">
+                    <div class="item">
+                        <label class="container-radio">
+                            Số tiền trả theo dư nợ giảm dần<input type="radio" name="radio" value="1" onchange="interest_changed(this)">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                    <div class="item">
+                        <label class="container-radio">
+                            Số tiền trả đều hàng tháng<input type="radio" checked="checked" name="radio" value="2" onchange="interest_changed(this)">
+                            <span class="checkmark"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="calculator-result">
+                    <div class="chart-reuslt">
+                        <div class="chart">
+                            <canvas id="chart" width="180" height="180"></canvas>
+
+                            <div id="chartjs-tooltip"></div>
+                        </div>
+                        <div class="result">
+                            <div class="inline">
+                                <label>Cần trả trước</label>
+                                <span class="blue"><i class="rs-retainer">0</i> VND</span>
+                            </div>
+                            <div class="inline">
+                                <label>Gốc cần trả</label>
+                                <span class="black"><i class="rs-payment">0</i> VND</span>
+                            </div>
+                            <div class="inline">
+                                <label>Lãi cần trả</label>
+                                <span class="red"><i class="rs-interest">0</i> VND</span>
+                            </div>
+
+                            <div class="first-value">
+                                <label>Số tiền trả tháng đầu</label>
+                                <span class="blue"><i class="amount-first-month">0</i> VND</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="more-result">
+                        <div class="note">(*) Công cụ tính toán trên website chỉ mang tính chất tham khảo</div>
+                    </div>
+                </div>
+                <script src="../js/chart/Chart.min.js"></script>
+                <script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+                <script type='text/javascript' src="https://rawgit.com/RobinHerbots/jquery.inputmask/3.x/dist/jquery.inputmask.bundle.js"></script>
+                <script src="../js/rangeslider.js"></script>
+                <script src="../js/rangeslider.min.js"></script>
+                <script src="../js/interest-rate.js"></script>
+
+            </div>
+            <style>
+                .output {
+                    display: block;
+                    font-size: 30px;
+                    font-weight: bold;
+                    text-align: center;
+                    margin: 30px 0;
+                    width: 100%;
+                }
+            </style>
+        </div>
+    </div>
+</body>
+</html>
