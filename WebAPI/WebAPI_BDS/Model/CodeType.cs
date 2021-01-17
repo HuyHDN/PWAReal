@@ -9,6 +9,6 @@ namespace WebAPI_BDS.Model
     {
         public Guid ID { get; set; }
         public string Name { get; set; }
-        public Guid ParentID { get; set; }
+        public Guid? ParentID { get; set; }
     }
 }

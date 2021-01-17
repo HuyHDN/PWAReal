@@ -1,6 +1,6 @@
 {
-  "name": "WebPWA",
-  "short_name": "WebPWA",
+  "name": "Amberos Reals",
+  "short_name": "Amberos Reals",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",

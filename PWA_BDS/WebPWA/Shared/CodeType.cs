@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace WebPWA.Shared
+namespace WebRealEste.Shared
 {
     public class CodeType
     {

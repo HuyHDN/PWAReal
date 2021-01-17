@@ -1,344 +1,5 @@
 ﻿@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-.home-center {
-    width: auto;
-    max-width: 100%;
-    margin: 0 auto;
-}
-
-.banner-home-slide {
-    position: relative;
-    width: 100%;
-    background: rgba(0,0,0,.25);
-    height: 400px;
-}
-
-
-.home-search {
-    position: absolute;
-    top: 0;
-    left: calc(50% - 475.5px);
-    width: 960px;
-    z-index: 9;
-}
-
-    .home-search .home-search-tool {
-        margin: 45px auto 0 auto;
-        width: 960px;
-    }
-
-        .home-search .home-search-tool ul {
-            margin: 0;
-            padding: 0;
-            height: 40px;
-        }
-
-        .home-search .home-search-tool .home-search-content {
-            background: rgba(0,0,0,.65);
-            box-shadow: 0 4px 4px rgba(0,0,0,.25);
-            border-radius: 0 5px 5px 5px;
-            padding: 9px;
-            width: 942px;
-        }
-
-            .home-search .home-search-tool .home-search-content .home-search-control {
-                background: #fff;
-                border-radius: 3px 5px 5px 3px;
-            }
-
-                .home-search .home-search-tool .home-search-content .home-search-control .search-cate {
-                    float: left;
-                    width: 20%;
-                    height: 42px;
-                    box-sizing: border-box;
-                    position: relative;
-                    cursor: pointer;
-                    border-right: 1px solid #ececec;
-                }
-
-                    .home-search .home-search-tool .home-search-content .home-search-control .search-cate .select-custom {
-                        border-right: 1px solid #ececec;
-                        font-weight: bold;
-                        color: #555;
-                        border-radius: 3px 0 0 3px;
-                        background-image: url(https://file4.batdongsan.com.vn/images/newhome/icon3x/icon-home-search.png);
-                        background-repeat: no-repeat;
-                        background-position: 10px center;
-                        width: 100%;
-                        height: 100%;
-                        position: relative;
-                        font-size: 14px;
-                        display: block;
-                        line-height: 40px;
-                        background-size: 20px 21px;
-                    }
-
-                        .home-search .home-search-tool .home-search-content .home-search-control .search-cate .select-custom #lblCurrCate {
-                            white-space: nowrap;
-                            width: 119px;
-                            overflow: hidden;
-                            text-overflow: ellipsis;
-                            display: inline-block;
-                            margin-left: 40px;
-                            font-size: 14px;
-                            line-height: 42px;
-                        }
-
-                        .home-search .home-search-tool .home-search-content .home-search-control .search-cate .select-custom:after, .new-home-2020 .advance-select-box span.select-text:after {
-                            content: '';
-                            background: url(https://file4.batdongsan.com.vn/images/newhome/icon3x/icon-down-arrow.png) no-repeat center center;
-                            position: absolute;
-                            right: 15px;
-                            top: 12px;
-                            width: 15px;
-                            height: 18px;
-                            background-size: 15px 18px;
-                        }
-
-                    .home-search .home-search-tool .home-search-content .home-search-control .search-cate .advance-select-options {
-                        position: absolute;
-                        top: 42px;
-                        left: 0;
-                        width: 226px;
-                        background: #fff;
-                        box-sizing: border-box;
-                        display: none;
-                        z-index: 10000;
-                        padding: 0;
-                        box-shadow: 0 4px 4px rgba(0,0,0,.25);
-                        border-radius: 0;
-                        min-width: 226px !important;
-                        border-left: 1px solid #12a9d9;
-                        border-right: 1px solid #12a9d9;
-                        border-bottom: 1px solid #12a9d9;
-                    }
-
-                        .home-search .home-search-tool .home-search-content .home-search-control .search-cate .advance-select-options ul {
-                            max-height: inherit;
-                            max-width: inherit;
-                            min-width: 226px !important;
-                        }
-
-                            .home-search .home-search-tool .home-search-content .home-search-control .search-cate .advance-select-options ul li {
-                                cursor: pointer;
-                                padding: 0;
-                                margin: 0 14px;
-                            }
-
-                .home-search .home-search-tool .home-search-content .home-search-control .search-input {
-                    float: left;
-                    width: 60%;
-                    position: relative;
-                }
-
-                    .home-search .home-search-tool .home-search-content .home-search-control .search-input input[type=text] {
-                        width: 100%;
-                        height: 42px;
-                        padding: 12px 15px;
-                        font-size: 14px;
-                        box-sizing: border-box;
-                        border: 0;
-                    }
-
-                .home-search .home-search-tool .home-search-content .home-search-control .search-button {
-                    float: right;
-                    width: 20%;
-                }
-
-                    .home-search .home-search-tool .home-search-content .home-search-control .search-button .btn-home-search {
-                        width: 100%;
-                        background: #3c9f10 url(https://file4.batdongsan.com.vn/images/newhome/icon3x/icon-search.png) no-repeat 20px 12px;
-                        border-radius: 0 5px 5px 0;
-                        height: 42px;
-                        text-align: center;
-                        color: #fff;
-                        border: 0;
-                        display: block;
-                        font-weight: bold;
-                        font-size: 16px;
-                        padding-left: 25px;
-                        margin: 0;
-                        background-size: 16px 16px;
-                        box-sizing: border-box;
-                    }
-
-        .home-search .home-search-tool .home-search-tab li {
-            display: inline-block;
-            width: 159.33px;
-            height: 20px;
-            border-radius: 5px 5px 0 0;
-            font-size: 14px;
-            line-height: 20px;
-            text-align: center;
-            text-transform: uppercase;
-            background: #fff;
-            opacity: .85;
-            color: #777;
-            padding: 12px 0 6px 0;
-            height: 40px;
-        }
-
-            .home-search .home-search-tool .home-search-tab .actived, .home-search .home-search-tool .home-search-tab li:hover {
-                background: rgba(0,0,0,.65);
-                color: #fff;
-                cursor: pointer;
-            }
-
-
-ul li {
-    list-style: none;
-}
-
-.bg-grey {
-    background: #f0f2f5;
-}
-
-.product {
-    width: 1124px;
-    margin: 0 auto;
-    padding: 28px 0 30px;
-    border: none;
-}
-
-    .product .product-thump {
-        height: 144px;
-        position: relative;
-    }
-
-    .product ul li {
-        list-style: none;
-        width: 240px;
-        background: #fff;
-        margin: 0 28px 30px 0;
-        float: left;
-    }
-
-.product-img {
-    width: 240px;
-}
-
-.clear {
-    clear: both;
-    height: 0;
-}
-
-.home-product-bound {
-    padding: 8px 12px 10px 12px;
-    border-top: none;
-    box-sizing: border-box;
-    border-radius: 0 0 4px 4px;
-}
-
-    .home-product-bound .product-price {
-        font-family: Roboto;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 14px;
-        line-height: 20px;
-        color: #2c2f36;
-        width: auto;
-        float: left;
-        margin-right: 8px;
-    }
-
-    .home-product-bound .pro-m2 {
-        font-family: Roboto;
-        font-style: normal;
-        font-weight: bold;
-        font-size: 14px;
-        line-height: 20px;
-        color: #2c2f36;
-        width: auto;
-        float: left;
-        margin-left: 8px;
-    }
-
-    .home-product-bound .product-address {
-        display: inline-block;
-        width: 100%;
-        font-family: Roboto;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 20px;
-        margin: 4px 0 6px 0;
-        color: #2c2f36;
-    }
-
-    .home-product-bound .product-title {
-        display: -webkit-box;
-        height: 40px;
-        overflow: hidden;
-        -webkit-line-clamp: 2;
-        position: relative;
-        text-overflow: ellipsis;
-        width: 220px;
-        white-space: normal;
-        word-wrap: break-word;
-        -webkit-box-orient: vertical;
-        color: #004e7f;
-        font-family: Roboto;
-        font-style: normal;
-        font-weight: 500;
-        font-size: 14px;
-        line-height: 20px;
-        margin-bottom: 4px;
-    }
-
-.title-detail {
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: 500;
-    font-size: 22px;
-    line-height: 28px;
-    color: #2c2f36;
-    margin-bottom: 16px;
-    display: inline-block;
-    width: 100%;
-}
-
-.des-product {
-    font-family: Roboto;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 16px;
-    line-height: 24px;
-    color: #2c2f36;
-}
-
-.short-detail-2 {
-    width: 100%;
-    display: block;
-    margin-top: 20px;
-}
-
-    .short-detail-2 li {
-        float: left;
-        margin-right: 64px;
-    }
-
-    .short-detail-2 .sp1 {
-        font-style: normal;
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 20px;
-        color: #747c87;
-        width: auto;
-        display: block;
-        margin-bottom: 4px;
-    }
-
-    .short-detail-2 .sp3 {
-        font-family: Roboto;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 14px;
-        line-height: 20px;
-        color: #2c2f36;
-        width: auto;
-    }
-
-
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
@@ -380,10 +41,10 @@ app {
             margin-left: 1.5rem;
         }
 
-        .main .top-row a:first-child {
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+.main .top-row a:first-child {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 .sidebar {
     background-image: linear-gradient(180deg, rgb(5, 39, 103) 0%, #3a0647 70%);
@@ -424,7 +85,6 @@ app {
             display: flex;
             align-items: center;
             line-height: 3rem;
-            width: 200px;
         }
 
             .sidebar .nav-item a.active {
@@ -469,12 +129,12 @@ app {
     z-index: 1000;
 }
 
-    #blazor-error-ui .dismiss {
-        cursor: pointer;
-        position: absolute;
-        right: 0.75rem;
-        top: 0.5rem;
-    }
+#blazor-error-ui .dismiss {
+    cursor: pointer;
+    position: absolute;
+    right: 0.75rem;
+    top: 0.5rem;
+}
 
 @media (max-width: 767.98px) {
     .main .top-row:not(.auth) {
@@ -503,6 +163,7 @@ app {
     }
 
     .main .top-row {
+        position: sticky;
         top: 0;
     }
 

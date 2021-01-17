@@ -1,12 +1,15 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
+using System.IO;
 using WebAPI_BDS.Model;
 using WebAPI_BDS.Service;
 
@@ -30,6 +33,7 @@ namespace WebAPI_BDS
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IPropertyService, PropertyService>();
+            services.AddScoped<ILocationService, LocationService>();
             services.AddDbContext<BdsDbContext>(item => item.UseSqlServer(Configuration.GetConnectionString("myconn")));
             services.AddEntityFrameworkSqlServer();
             services.AddAuthentication(option =>
@@ -48,16 +52,25 @@ namespace WebAPI_BDS
             }
 
             //app.UseHttpsRedirection();
-
+            app.UseStaticFiles();
             app.UseAuthentication();
 
             app.UseRouting();
 
+            
+            
+
             app.UseCors(
-                    options => options.WithOrigins("http://localhost:5000", "https://localhost:44345").AllowAnyMethod().AllowAnyHeader()
+                    options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader()
                 );
 
             app.UseAuthorization();
+
+            app.UseStaticFiles(new StaticFileOptions()
+            {
+                FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), @"StaticFiles")),
+                RequestPath = new PathString("/StaticFiles")
+            });
 
             app.UseEndpoints(endpoints =>
             {

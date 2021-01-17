@@ -34,7 +34,7 @@ namespace WebAPI_BDS.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ParentID")
+                    b.Property<Guid?>("ParentID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
@@ -53,7 +53,7 @@ namespace WebAPI_BDS.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ParentID")
+                    b.Property<Guid?>("ParentID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
@@ -76,10 +76,17 @@ namespace WebAPI_BDS.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ParentID")
+                    b.Property<Guid?>("ParentID")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("ParentLocationID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
+
+                    b.HasIndex("LocationTypeID");
+
+                    b.HasIndex("ParentLocationID");
 
                     b.ToTable("Location");
                 });
@@ -93,7 +100,7 @@ namespace WebAPI_BDS.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ParentID")
+                    b.Property<Guid?>("ParentID")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("ID");
@@ -144,7 +151,7 @@ namespace WebAPI_BDS.Migrations
                     b.Property<Guid>("AdsID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<float>("Area")
+                    b.Property<float?>("Area")
                         .HasColumnType("real");
 
                     b.Property<string>("Content")
@@ -156,46 +163,59 @@ namespace WebAPI_BDS.Migrations
                     b.Property<Guid>("CreatedUserID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<bool>("HasTitle")
-                        .HasColumnType("bit");
+                    b.Property<bool?>("HasTitle")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<string>("Image")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("IsNegotiable")
-                        .HasColumnType("bit");
+                    b.Property<string>("Image2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Image3")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool?>("IsNegotiable")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
 
                     b.Property<DateTime>("LastModifiedDateTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("Length")
+                    b.Property<float?>("Length")
                         .HasColumnType("real");
 
                     b.Property<Guid>("LocationID")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("NoOfRooms")
+                    b.Property<int?>("NoOfRooms")
                         .HasColumnType("int");
 
-                    b.Property<int>("NoOfStorey")
+                    b.Property<int?>("NoOfStorey")
                         .HasColumnType("int");
 
-                    b.Property<int>("NoOfToilets")
+                    b.Property<int?>("NoOfToilets")
                         .HasColumnType("int");
 
-                    b.Property<int>("Orientation")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("OrientationID")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("PriceFrom")
+                    b.Property<decimal?>("PriceFrom")
                         .HasPrecision(19, 4)
                         .HasColumnType("decimal(19,4)");
 
-                    b.Property<decimal>("PriceTo")
+                    b.Property<decimal?>("PriceTo")
                         .HasPrecision(19, 4)
                         .HasColumnType("decimal(19,4)");
 
                     b.Property<Guid?>("PropertyTypeID")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("SuccessedDateTime")
                         .HasColumnType("datetime2");
@@ -209,7 +229,12 @@ namespace WebAPI_BDS.Migrations
                     b.Property<DateTime>("ValidityDateTo")
                         .HasColumnType("datetime2");
 
-                    b.Property<float>("Width")
+                    b.Property<int>("ViewCount")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(0);
+
+                    b.Property<float?>("Width")
                         .HasColumnType("real");
 
                     b.HasKey("ID");
@@ -219,6 +244,8 @@ namespace WebAPI_BDS.Migrations
                     b.HasIndex("CreatedUserID");
 
                     b.HasIndex("LocationID");
+
+                    b.HasIndex("OrientationID");
 
                     b.HasIndex("PropertyTypeID");
 
@@ -303,6 +330,23 @@ namespace WebAPI_BDS.Migrations
                     b.Navigation("CodeType");
                 });
 
+            modelBuilder.Entity("WebAPI_BDS.Model.Location", b =>
+                {
+                    b.HasOne("WebAPI_BDS.Model.LocationType", "LocationType")
+                        .WithMany()
+                        .HasForeignKey("LocationTypeID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("WebAPI_BDS.Model.Location", "ParentLocation")
+                        .WithMany()
+                        .HasForeignKey("ParentLocationID");
+
+                    b.Navigation("LocationType");
+
+                    b.Navigation("ParentLocation");
+                });
+
             modelBuilder.Entity("WebAPI_BDS.Model.News", b =>
                 {
                     b.HasOne("WebAPI_BDS.Model.User", "User")
@@ -334,6 +378,10 @@ namespace WebAPI_BDS.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("WebAPI_BDS.Model.Code", "Orientation")
+                        .WithMany()
+                        .HasForeignKey("OrientationID");
+
                     b.HasOne("WebAPI_BDS.Model.Code", "PropertyType")
                         .WithMany()
                         .HasForeignKey("PropertyTypeID");
@@ -343,6 +391,8 @@ namespace WebAPI_BDS.Migrations
                     b.Navigation("CreatedUser");
 
                     b.Navigation("Location");
+
+                    b.Navigation("Orientation");
 
                     b.Navigation("PropertyType");
                 });

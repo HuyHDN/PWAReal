@@ -1,0 +1,406 @@
+﻿@page "/property/addproperty"
+@using Client.ViewModel
+@using WebRealEste.Shared
+@using System.Net.Http.Headers;
+@using Tewr.Blazor.FileReader;
+@inject NavigationManager NavigationManager
+@inject PropertyViewModel _propertyViewModel
+@inject UserViewModel _userViewModel
+@inject IJSRuntime JSRuntime
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+@inject IFileReaderService FileReaderService
+<!-- Header section -->
+<HeaderMenu />
+
+@if (isLoaded)
+{
+    <div id="preloder" style="display: @(isLoaded ? "none" : "")">
+        <div class="loader"></div>
+    </div>
+}
+else
+{
+    <div id="preloder" style="display: @(isLoaded ? "none" : "")">
+        <div class="loader"></div>
+    </div>
+}
+<section class="page-top-section set-bg" style="background-image: url(Content/image/page-top-bg.jpg)">
+    <div class="container text-white">
+        <h2>ĐĂNG TIN</h2>
+    </div>
+</section>
+<!--  Page top end -->
+<!-- Breadcrumb -->
+<div class="site-breadcrumb">
+    <div class="container">
+        <a href=""><i class="fa fa-home"></i>Trang chủ</a>
+        <span><i class="fa fa-angle-right"></i>Đăng tin</span>
+    </div>
+</div>
+
+<section class="page-section">
+    <div class="container">
+        <h3>ĐĂNG TIN RAO BÁN NHÀ ĐẤT</h3>
+        @if (isLogin)
+        {
+            <EditForm Model="@_propertyViewModel" OnValidSubmit="HandleAddProperty">
+                <DataAnnotationsValidator />
+                <label class="addproperty_lblGroup">THÔNG TIN CƠ BẢN</label>
+                <div class="form-inline">
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Tiêu đề</label>
+                        <InputText class="addproperty_Textbox" @bind-Value="_propertyViewModel.Title" />
+                        <ValidationMessage For="@(() => _propertyViewModel.Title)" />
+                    </div>
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Loại</label>
+                        <select @bind="_propertyViewModel.PropertyTypeID" class="addproperty_Textbox">
+                            <option value="0">Phân mục</option>
+                            @foreach (var type in lstPropertyType)
+                            {
+                                <option value="@type.ID">@type.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Tỉnh / Thành phố</label>
+                        <select @onchange="CityChange" class="addproperty_Textbox">
+                            <option value="0">Tỉnh / Thành phố</option>
+                            @foreach (var city in lstCity)
+                            {
+                                <option value="@city.ID">@city.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Quận / Huyện</label>
+                        <select @onchange="DistrictChange" class="addproperty_Textbox">
+                            <option value="0">Quận / Huyện</option>
+                            @foreach (var district in lstDistrict)
+                            {
+                                <option value="@district.ID">@district.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Phường / Xã</label>
+                        <select @bind="_propertyViewModel.LocationID" class="addproperty_Textbox">
+                            <option value="0">Phường / Xã</option>
+                            @foreach (var ward in lstWard)
+                            {
+                                <option value="@ward.ID">@ward.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Địa chỉ</label>
+                        <InputText @bind-Value="_propertyViewModel.Address" class="addproperty_Textbox" />
+                        <ValidationMessage For="@(() => _propertyViewModel.Address)" />
+                    </div>
+
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Chiều rộng</label>
+                        <input type="text" min="0" decimal="true" numbersonly="true" numberonly="2" max="9999" @bind-value="_propertyViewModel.Width" class="addproperty_Textbox" />
+                        <ValidationMessage For="@(() => _propertyViewModel.Width)" />
+                    </div>
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Chiều dài</label>
+                        <InputNumber @bind-Value="_propertyViewModel.Length" class="addproperty_Textbox" />
+                        <ValidationMessage For="@(() => _propertyViewModel.Length)" />
+                    </div>
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Giá từ</label>
+                        <InputNumber @bind-Value="_propertyViewModel.PriceFrom" class="addproperty_Textbox" />
+                        @priceFrom
+                    </div>
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">đến</label>
+                        <InputNumber @bind-Value="_propertyViewModel.PriceTo" class="addproperty_Textbox" />
+                        @priceTo
+                    </div>
+
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Diện tích( m2)</label>
+                        <InputNumber @bind-Value="_propertyViewModel.Area" class="addproperty_Textbox" />
+                    </div>
+                </div>
+
+
+                <label class="addproperty_lblGroup">THÔNG TIN KHÁC</label>
+                <div class="form-inline">
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Hướng</label>
+                        <select @bind="_propertyViewModel.OrientationID" class="addproperty_Textbox">
+                            <option value="0">KXĐ</option>
+                            @foreach (var ori in lstOrientation)
+                            {
+                                <option value="@ori.ID">@ori.Name</option>
+                            }
+                        </select>
+                    </div>
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Số lầu</label>
+                        <InputNumber @bind-Value="_propertyViewModel.NoOfStorey" class="addproperty_Textbox" />
+                    </div>
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Số phòng</label>
+                        <InputNumber @bind-Value="_propertyViewModel.NoOfRooms" class="addproperty_Textbox" />
+                    </div>
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Số toilet</label>
+                        <InputNumber @bind-Value="_propertyViewModel.NoOfToilets" class="addproperty_Textbox" />
+                    </div>
+                    <div class="form-inline" style="width:100%;">
+                        <label class="addproperty_lable" style="width: 10%">Mô tả chi tiết</label>
+                        <InputTextArea @bind-Value="_propertyViewModel.Content" class="addproperty_Textarea" />
+                    </div>
+
+                </div>
+                <label class="addproperty_lblGroup">LỊCH ĐĂNG TIN</label>
+                <div class="form-inline">
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Loại tin</label>
+                        <select @bind="_propertyViewModel.AdsID" class="addproperty_Textbox">
+                            <option value="0">Phân mục</option>
+                            @foreach (var type in lstAds)
+                            {
+                                <option value="@type.ID">@type.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Ngày đăng</label>
+                        <InputDate @bind-Value="_propertyViewModel.ValidityDateFrom" class="addproperty_Textbox" />
+                    </div>
+                    <div class="form-inline" style="width:50%;">
+                        <label class="addproperty_lable">Ngày hết hạn</label>
+                        <InputDate @bind-Value="_propertyViewModel.ValidityDateTo" class="addproperty_Textbox" />
+                    </div>
+                </div>
+                <label class="addproperty_lblGroup">HÌNH ẢNH VÀ VIDEO</label>
+                <div class="form-inline">
+                    <!--Image 1-->
+                    <input type="file" @ref="_input" @onchange="UploadChange" id="BrowseImage" style="display:none" accept=".jpg, .jpeg, .png" /><br />
+                    <img id="UploadImage" src="@imgSrc" @onclick="UploadClickEvent" style="width:300px;cursor:pointer" />
+                    <button type="button" class="btn-primary" @onclick="ClearImage">Xóa hình</button>
+                    <!--Image 2-->
+                    <input type="file" @ref="_input2" @onchange="UploadChange2" id="BrowseImage2" style="display:none" accept=".jpg, .jpeg, .png" /><br />
+                    <img id="UploadImage2" src="@imgSrc2" @onclick="UploadClickEvent2" style="width:300px;cursor:pointer" />
+                    <button type="button" class="btn-primary" @onclick="ClearImage2">Xóa hình</button>
+                    <!--Image 3-->
+                    <input type="file" @ref="_input3" @onchange="UploadChange3" id="BrowseImage3" style="display:none" accept=".jpg, .jpeg, .png" /><br />
+                    <img id="UploadImage3" src="@imgSrc3" @onclick="UploadClickEvent3" style="width:300px;cursor:pointer" />
+                    <button type="button" class="btn-primary" @onclick="ClearImage3">Xóa hình</button>
+                </div>
+                <button type="submit" class="btn btn-primary" style="margin-top:30px;">Đăng tin</button>
+            </EditForm>
+        }
+        else
+        {
+            <h2>Vui lòng đăng nhập để tiếp tục đăng tin</h2>
+        }
+    </div>
+</section>
+
+@code {
+    bool isLoaded = false;
+    List<Code> lstPropertyType = new List<Code>();
+    List<Location> lstCity = new List<Location>();
+    List<Location> lstDistrict = new List<Location>();
+    List<Location> lstWard = new List<Location>();
+    List<Code> lstOrientation = new List<Code>();
+    List<Code> lstAds = new List<Code>();
+    Guid selectedCityID, selectedDistrictID;
+    string key = "userInfo";
+    string imgSrc, imgSrc2, imgSrc3;
+    bool isLogin = false;
+    ElementReference _input, _input2, _input3;
+    UserSession currentUser = new UserSession();
+
+    public string priceFrom
+    {
+        get
+        {
+            if (_propertyViewModel != null && _propertyViewModel.PriceFrom != null && _propertyViewModel.PriceFrom.HasValue)
+                return _propertyViewModel.PriceToString(_propertyViewModel.PriceFrom.Value);
+            return "";
+        }
+    }
+
+    public string priceTo
+    {
+        get
+        {
+            if (_propertyViewModel != null && _propertyViewModel.PriceTo != null && _propertyViewModel.PriceTo.HasValue)
+                return _propertyViewModel.PriceToString(_propertyViewModel.PriceTo.Value);
+            return "";
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        currentUser = await localStorage.GetItemAsync<UserSession>(key);
+        if (currentUser != null)
+        {
+            isLogin = true;
+            lstAds = await _propertyViewModel.GetNewType();
+            lstPropertyType = await _propertyViewModel.GetPropertyType();
+            lstCity = await _propertyViewModel.GetCity();
+            lstOrientation = await _propertyViewModel.GetOrientation();
+            imgSrc = imgSrc2 = imgSrc3 = "Content/image/no-image-available-icon-7.jpg";
+            _propertyViewModel.NoOfRooms = _propertyViewModel.NoOfToilets = _propertyViewModel.NoOfStorey = 0;
+            _propertyViewModel.ValidityDateFrom = DateTime.Now;
+            _propertyViewModel.ValidityDateTo = DateTime.Now.AddDays(7);
+        }
+        isLoaded = true;
+    }
+
+    private async Task CityChange(ChangeEventArgs e)
+    {
+        selectedCityID = Guid.Parse(e.Value.ToString());
+        lstDistrict = await _propertyViewModel.GetDistrict(selectedCityID);
+        lstWard = new List<Location>();
+        _propertyViewModel.LocationID = Guid.Empty;
+    }
+
+    private async Task DistrictChange(ChangeEventArgs e)
+    {
+        selectedDistrictID = Guid.Parse(e.Value.ToString());
+        lstWard = await _propertyViewModel.GetWard(selectedDistrictID);
+        _propertyViewModel.LocationID = Guid.Empty;
+    }
+
+    private async Task HandleAddProperty()
+    {
+        foreach (var file in await FileReaderService.CreateReference(_input).EnumerateFilesAsync())
+        {
+            if (file != null)
+            {
+                var fileInfo = await file.ReadFileInfoAsync();
+                using (var ms = await file.CreateMemoryStreamAsync(4 * 1024))
+                {
+                    var content = new MultipartFormDataContent();
+                    content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+                    content.Add(new StreamContent(ms, Convert.ToInt32(ms.Length)), "image", fileInfo.Name);
+                    await _propertyViewModel.UploadProductImage(content);
+                    _propertyViewModel.Image = fileInfo.Name;
+                }
+            }
+        }
+        foreach (var file in await FileReaderService.CreateReference(_input2).EnumerateFilesAsync())
+        {
+            if (file != null)
+            {
+                var fileInfo = await file.ReadFileInfoAsync();
+                using (var ms = await file.CreateMemoryStreamAsync(4 * 1024))
+                {
+                    var content = new MultipartFormDataContent();
+                    content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+                    content.Add(new StreamContent(ms, Convert.ToInt32(ms.Length)), "image", fileInfo.Name);
+                    await _propertyViewModel.UploadProductImage(content);
+                    _propertyViewModel.Image2 = fileInfo.Name;
+                }
+            }
+        }
+        foreach (var file in await FileReaderService.CreateReference(_input3).EnumerateFilesAsync())
+        {
+            if (file != null)
+            {
+                var fileInfo = await file.ReadFileInfoAsync();
+                using (var ms = await file.CreateMemoryStreamAsync(4 * 1024))
+                {
+                    var content = new MultipartFormDataContent();
+                    content.Headers.ContentDisposition = new ContentDispositionHeaderValue("form-data");
+                    content.Add(new StreamContent(ms, Convert.ToInt32(ms.Length)), "image", fileInfo.Name);
+                    await _propertyViewModel.UploadProductImage(content);
+                    _propertyViewModel.Image3 = fileInfo.Name;
+                }
+            }
+        }
+        User u = await _userViewModel.GetUserByLoginName(currentUser.LoginName);
+        _propertyViewModel.CreatedUserID = u.ID;
+        await _propertyViewModel.CreateProperty();
+        NavigationManager.NavigateTo("/");
+    }
+
+    private async Task UploadClickEvent()
+    {
+        imgSrc = "Content/image/Spinner-1s-200px.gif";
+        await JSRuntime.InvokeVoidAsync("UploadClickEvent");
+    }
+
+    private async Task UploadClickEvent2()
+    {
+        imgSrc2 = "Content/image/Spinner-1s-200px.gif";
+        await JSRuntime.InvokeVoidAsync("UploadClickEvent2");
+    }
+
+    private async Task UploadClickEvent3()
+    {
+        imgSrc3 = "Content/image/Spinner-1s-200px.gif";
+        await JSRuntime.InvokeVoidAsync("UploadClickEvent3");
+    }
+
+    private async Task UploadChange()
+    {
+        foreach (var file in await FileReaderService.CreateReference(_input).EnumerateFilesAsync())
+        {
+            if (file != null)
+            {
+                var fileInfo = await file.ReadFileInfoAsync();
+                using (var ms = await file.CreateMemoryStreamAsync(4 * 1024))
+                {
+                    imgSrc = "data:image/png;base64," + Convert.ToBase64String(ms.ToArray(), 0, ms.ToArray().Length);
+                }
+            }
+        }
+    }
+
+    private async Task UploadChange2()
+    {
+        foreach (var file in await FileReaderService.CreateReference(_input2).EnumerateFilesAsync())
+        {
+            if (file != null)
+            {
+                var fileInfo = await file.ReadFileInfoAsync();
+                using (var ms = await file.CreateMemoryStreamAsync(4 * 1024))
+                {
+                    imgSrc2 = "data:image/png;base64," + Convert.ToBase64String(ms.ToArray(), 0, ms.ToArray().Length);
+                }
+            }
+        }
+    }
+
+    private async Task UploadChange3()
+    {
+        foreach (var file in await FileReaderService.CreateReference(_input3).EnumerateFilesAsync())
+        {
+            if (file != null)
+            {
+                var fileInfo = await file.ReadFileInfoAsync();
+                using (var ms = await file.CreateMemoryStreamAsync(4 * 1024))
+                {
+                    imgSrc3 = "data:image/png;base64," + Convert.ToBase64String(ms.ToArray(), 0, ms.ToArray().Length);
+                }
+            }
+        }
+    }
+
+    private void ClearImage()
+    {
+        imgSrc = "Content/image/no-image-available-icon-7.jpg";
+    }
+
+    private void ClearImage2()
+    {
+        imgSrc2 = "Content/image/no-image-available-icon-7.jpg";
+    }
+
+    private void ClearImage3()
+    {
+        imgSrc3 = "Content/image/no-image-available-icon-7.jpg";
+    }
+}

@@ -9,7 +9,7 @@ namespace WebAPI_BDS.Model
     {
         public Guid ID { get; set; }
         public string Name { get; set; }
-        public Guid ParentID { get; set; }
+        public Guid? ParentID { get; set; }
         public Guid CodeTypeID { get; set; }
         public CodeType CodeType { get; set; }
         public string FullPath { get; set; }

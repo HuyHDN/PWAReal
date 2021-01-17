@@ -1,0 +1,277 @@
+﻿@page "/property/single/{id}"
+@using WebRealEste.Shared
+@using Client.ViewModel
+@inject NavigationManager NavigationManager
+@inject PropertyViewModel _propertyViewModel
+@inject UserViewModel _userViewModel
+@inject IJSRuntime _js
+@inject Blazored.LocalStorage.ILocalStorageService localStorage
+<!-- Header section -->
+<HeaderMenu />
+
+@if (isLoaded)
+{
+    <div id="preloder" style="display: @(isLoaded ? "none" : "")">
+        <div class="loader"></div>
+    </div>
+}
+else
+{
+    <div id="preloder" style="display: @(isLoaded ? "none" : "")">
+        <div class="loader"></div>
+    </div>
+}
+<section class="page-top-section set-bg" style="background-image: url(Content/image/page-top-bg.jpg)">
+    <div class="container text-white">
+        <h2>DANH SÁCH NỔI BẬT</h2>
+    </div>
+</section>
+<!--  Page top end -->
+<!-- Breadcrumb -->
+<div class="site-breadcrumb">
+    <div class="container">
+        <a href=""><i class="fa fa-home"></i>Trang chủ</a>
+        <span><i class="fa fa-angle-right"></i>Danh sách nổi bật</span>
+    </div>
+</div>
+
+<!-- Page -->
+<section class="page-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 single-list-page">
+                @if (items.Count > 1)
+                {
+                    <BSCarousel NumberOfItems="@items.Count">
+                        <BSCarouselIndicators NumberOfItems="@items.Count" />
+                        <div class="carousel-inner">
+                            @for (int i = 0; i < items.Count; i++)
+                            {
+                                <BSCarouselItem src="@items[i].Source" alt="@items[i].Alt" />
+                            }
+                        </div>
+                        <BSCarouselControl CarouselDirection="CarouselDirection.Previous" NumberOfItems="@items.Count" />
+                        <BSCarouselControl CarouselDirection="CarouselDirection.Next" NumberOfItems="@items.Count" />
+                    </BSCarousel>
+                }
+                else if (items.Count == 1)
+                {
+                    <BSCarousel NumberOfItems="1">
+                        <div class="carousel-inner">
+                            <BSCarouselItem src="@items[0].Source" alt="@items[0].Alt" />
+                        </div>
+                    </BSCarousel>
+                }
+                <div class="single-list-content">
+                    <div class="row">
+                        <div class="col-xl-8 sl-title">
+                            <h2>@_propertyViewModel.Address</h2>
+                            @if (_propertyViewModel != null && _propertyViewModel.Location != null)
+                            {
+                                <p><i class="fa fa-map-marker"></i> @_propertyViewModel.Location.FullPath</p>
+                            }
+                        </div>
+                        <div class="col-xl-4">
+                            @if (_propertyViewModel.PriceFrom != null && _propertyViewModel.PriceFrom != 0 && _propertyViewModel.PriceTo != null && _propertyViewModel.PriceTo != 0)
+                            {
+                                <a href="#" class="price-btn">@_propertyViewModel.PriceToString(_propertyViewModel.PriceFrom.Value) - @_propertyViewModel.PriceToString(_propertyViewModel.PriceTo.Value)</a>
+                            }
+                            else
+                            {
+                                <a href="#" class="price-btn">Thỏa thuận</a>
+                            }
+                        </div>
+                    </div>
+                    <h3 class="sl-sp-title">THÔNG TIN CHI TIẾT</h3>
+                    <div class="description">
+                        <p>@_propertyViewModel.Content</p>
+                    </div>
+                    <div class="row property-details-list">
+                        <div class="col-md-4 col-sm-6">
+                            @if (_propertyViewModel != null && _propertyViewModel.PropertyType != null)
+                            {
+                                <p><i class="fa fa-building-o"></i> @_propertyViewModel.PropertyType.Name</p>
+                            }
+                            @if (_propertyViewModel != null && _propertyViewModel.CreatedUser != null)
+                            {
+                                <p><i class="fa fa-user"></i> @_propertyViewModel.CreatedUser.FullName</p>
+                            }
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <p><i class="fa fa-th-large"></i> @_propertyViewModel.Area m²</p>
+                            <p><i class="fa fa-clock-o"></i> @(DateTime.Today.Subtract(_propertyViewModel.CreatedDateTime).Days > 0 ? DateTime.Today.Subtract(_propertyViewModel.CreatedDateTime).Days.ToString() + " ngày trước" : "Hôm nay")</p>
+                        </div>
+                    </div>
+                    <h3 class="sl-sp-title">NỘI THẤT</h3>
+                    <div class="row property-details-list">
+                        <div class="col-md-4 col-sm-6">
+                            <p><i class="fa fa-bed"></i> @_propertyViewModel.NoOfRooms Phòng ngủ</p>
+                            <p><i class="fa fa-bath"></i> @_propertyViewModel.NoOfToilets Toilet</p>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <p><i class="fa fa-building"></i> @_propertyViewModel.NoOfStorey Lầu</p>
+                            <p><i class="fa fa-check-circle-o"></i> Living Room Sofa - Ghế sa lông phòng khách</p>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <p><i class="fa fa-check-circle-o"></i> Laundry Room - Phòng giặt là</p>
+                            <p><i class="fa fa-check-circle-o"></i> Internet</p>
+                        </div>
+                    </div>
+                    <h3 class="sl-sp-title">TIỆN NGHI</h3>
+                    <div class="row property-details-list">
+                        <div class="col-md-4 col-sm-6">
+                            <p><i class="fa fa-check-circle-o"></i> Public park - Công viên công cộng</p>
+                            <p><i class="fa fa-check-circle-o"></i> Elders relax area - Khu thư giãn cho người già</p>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <p><i class="fa fa-check-circle-o"></i> Fountain - Vòi phun nước</p>
+                            <p><i class="fa fa-check-circle-o"></i> Hospital - Bệnh viện</p>
+                        </div>
+                        <div class="col-md-4 col-sm-6">
+                            <p><i class="fa fa-check-circle-o"></i> Praying area - Khu cầu nguyện</p>
+                        </div>
+                    </div>
+                    <h3 class="sl-sp-title bd-no">Video</h3>
+                    <div class="perview-video">
+                        <img src="Content/image/video.jpg" alt="">
+                        <a href="https://www.youtube.com/watch?v=v13nSVp6m5I" class="video-link"><img src="Content/image/video-btn.png" alt=""></a>
+                    </div>
+                    <div style="width: 100%; min-height: 950px;">
+                        <iframe width="100%" height="950" src=@interestRateUrl frameborder="0"></iframe>
+                    </div>
+                </div>
+            </div>
+            <!-- sidebar -->
+            <div class="col-lg-4 col-md-7 sidebar">
+                <div class="author-card">
+                    <div class="author-img set-bg" style="background-image: url(Content/image/User-Icon.jpg)"></div>
+                    @if (_propertyViewModel != null && _propertyViewModel.CreatedUser != null)
+                    {
+                        <div class="author-info">
+                            <h5>@_propertyViewModel.CreatedUser.FullName</h5>
+                        </div>
+                        <div class="author-contact">
+                            <p><i class="fa fa-phone"></i><a href="tel:@_propertyViewModel.CreatedUser.Phone">@_propertyViewModel.CreatedUser.Phone</a></p>
+                            <p><i class="fa fa-envelope"></i>@_propertyViewModel.CreatedUser.LoginName</p>
+                        </div>
+                    }
+                </div>
+                <div class="related-properties">
+                    <h2>Mẫu tin liên quan</h2>
+                    @foreach (Property p in lstHotProperty)
+                    {
+                        propertyUrl = "/property/single/" + p.ID.ToString();
+                        <div class="rp-item">
+                            <a href="@propertyUrl">
+                                <div class="rp-pic set-bg" style="background-image: url(@(Config.Config.ApiUrl + "/Property/GetImage/" + p.Image))">
+                                    <div class="sale-notic">HOT</div>
+                                </div>
+                            </a>
+                            <div class="rp-info">
+                                <h5 style="cursor: pointer">@p.Title</h5>
+                                <p><i class="fa fa-map-marker"></i>@p.Location.FullPath</p>
+                            </div>
+                            @if (p.PriceFrom != null && p.PriceFrom != 0 && p.PriceTo != null && p.PriceTo != 0)
+                            {
+                                <a href="@propertyUrl" class="rp-price">@_propertyViewModel.PriceToString(p.PriceFrom.Value) - @_propertyViewModel.PriceToString(p.PriceTo.Value)</a>
+                            }
+                            else
+                            {
+                                <a href="@propertyUrl" class="rp-price">Thỏa thuận</a>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Page end -->
+<!-- Clients section -->
+<div class="clients-section">
+    <div class="container">
+        <div class="clients-slider owl-carousel">
+            <a href="#">
+                <img src="Content/image/partner/1.png" alt="">
+            </a>
+            <a href="#">
+                <img src="Content/image/partner/2.png" alt="">
+            </a>
+            <a href="#">
+                <img src="Content/image/partner/3.png" alt="">
+            </a>
+            <a href="#">
+                <img src="Content/image/partner/4.png" alt="">
+            </a>
+            <a href="#">
+                <img src="Content/image/partner/5.png" alt="">
+            </a>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string id { get; set; }
+
+    bool isLoaded = false;
+    Guid pID;
+    List<Property> lstHotProperty = new List<Property>();
+    string propertyUrl, interestRateUrl;
+    IList<Item> items = new List<Item>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        pID = Guid.Parse(id);
+        await _propertyViewModel.UpdatePropertyView(pID);
+        await _propertyViewModel.GetPropertyByID(pID);
+        lstHotProperty = await _propertyViewModel.GetPropertyByType("Hot");
+        Item a;
+        if (string.IsNullOrEmpty(_propertyViewModel.Image) && string.IsNullOrEmpty(_propertyViewModel.Image2) && string.IsNullOrEmpty(_propertyViewModel.Image3))
+        {
+            a = new Item
+            {
+                Source = "Content/image/no-image-available-icon-7.jpg",
+            };
+            items.Add(a);
+        }
+        else
+        {
+            if (!string.IsNullOrEmpty(_propertyViewModel.Image))
+            {
+                a = new Item
+                {
+                    Source = Config.Config.ApiUrl + "/Property/GetImage/" + _propertyViewModel.Image,
+                };
+                items.Add(a);
+            }
+            if (!string.IsNullOrEmpty(_propertyViewModel.Image2))
+            {
+                a = new Item
+                {
+                    Source = Config.Config.ApiUrl + "/Property/GetImage/" + _propertyViewModel.Image2,
+                };
+                items.Add(a);
+            }
+            if (!string.IsNullOrEmpty(_propertyViewModel.Image3))
+            {
+                a = new Item
+                {
+                    Source = Config.Config.ApiUrl + "/Property/GetImage/" + _propertyViewModel.Image3,
+                };
+                items.Add(a);
+            }
+        }
+        interestRateUrl = Config.Config.RateUrl + "/interestrate.html";
+        isLoaded = true;
+    }
+
+
+    class Item
+    {
+        public string Source { get; set; }
+        public string Alt { get; set; }
+        public string Caption { get; set; }
+        public string Header { get; set; }
+    }
+}

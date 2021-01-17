@@ -34,9 +34,23 @@ namespace WebAPI_BDS.Service
             return userResponse;
         }
 
+        public async Task<ServiceResponse<User>> GetUserByLoginName(string name)
+        {
+            ServiceResponse<User> userResponse = new ServiceResponse<User>();
+            userResponse.Data = await _context.Users.Where(x => x.LoginName == name).FirstOrDefaultAsync();
+            return userResponse;
+        }
+
         public async Task<ServiceResponse<List<User>>> CreateNewUser(User newUser)
         {
             newUser.ID = System.Guid.NewGuid();
+            newUser.isActive = true;
+            //Role role = await _context.Roles.Where(x => x.Code == "UC").FirstOrDefaultAsync();
+            //UserRole ur = new UserRole();
+            //ur.ID = System.Guid.NewGuid();
+            //ur.RoleID = role.ID;
+            //ur.UserID = newUser.ID;
+            //_context.UserRoles.Add(ur);
             _context.Users.Add(newUser);
             await _context.SaveChangesAsync();
             ServiceResponse<List<User>> userResponse = new ServiceResponse<List<User>>();
@@ -44,7 +58,7 @@ namespace WebAPI_BDS.Service
             return userResponse;
         }
 
-        public async Task<ServiceResponse<User>> UpdateUser(Guid id,User user)
+        public async Task<ServiceResponse<User>> UpdateUser(Guid id, User user)
         {
             User userToUpdate = await _context.Users.Where(x => x.ID == id).FirstOrDefaultAsync();
             userToUpdate.FullName = user.FullName;
@@ -87,6 +101,23 @@ namespace WebAPI_BDS.Service
             {
                 userResponse.Message = "Login fail";
                 userResponse.Success = false;
+            }
+            return userResponse;
+        }
+
+        public async Task<ServiceResponse<string>> GetUserRole(Guid userID)
+        {
+            ServiceResponse<string> userResponse = new ServiceResponse<string>();
+            string roleCode = string.Empty;
+            User user = await _context.Users.Where(x => x.ID == userID).FirstOrDefaultAsync();
+            if (user != null)
+            {
+                UserRole ur = await _context.UserRoles.Where(x => x.UserID == userID).FirstOrDefaultAsync();
+                if (ur != null)
+                {
+                    Role r = await _context.Roles.Where(x => x.ID == ur.RoleID).FirstOrDefaultAsync();
+                    userResponse.Data = r.Code;
+                }
             }
             return userResponse;
         }
